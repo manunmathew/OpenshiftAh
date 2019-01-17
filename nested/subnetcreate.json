@@ -1,0 +1,61 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"location": {
+			"type": "string",
+			"metadata": {
+				"description": "Datacenter Region Location"
+			}
+		},
+		"apiVersionNetwork": {
+			"type": "string",
+			"metadata": {
+				"description": "Network API version"
+			}
+		},
+		"existingVnetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Existing virtual network name"
+			}
+		},
+		"subnetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the subnet"
+			}
+		},
+		"subnetPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "Subnet CIDR"
+			}
+		},
+		"networkSecurityGroup": {
+			"type": "string",
+			"metadata": {
+				"description": "Nsg name"
+			}
+		}
+	},
+	"variables": {
+	},
+	"resources": [
+		{
+			"apiVersion": "[parameters('apiVersionNetwork')]",
+			"type": "Microsoft.Network/virtualNetworks/subnets",
+			"name": "[concat(parameters('existingVnetName'), '/', parameters('subnetName'))]",
+			"location": "[parameters('location')]",
+			"dependsOn": [
+			],
+			"properties": {
+				"addressPrefix": "[parameters('subnetPrefix')]",
+				"networkSecurityGroup": {
+					"id": "[parameters('networkSecurityGroup')]"
+				}
+			}
+		}
+	],
+	"outputs": {}
+}

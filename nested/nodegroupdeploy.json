@@ -1,0 +1,271 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"location": {
+			"type": "string",
+			"metadata": {
+				"description": "Datacenter Region Location"
+			}
+		},
+		"apiVersionStorage": {
+			"type": "string",
+			"metadata": {
+				"description": "Storage API version"
+			}
+		},
+		"apiVersionNetwork": {
+			"type": "string",
+			"metadata": {
+				"description": "Network API version"
+			}
+		},
+		"apiVersionCompute": {
+			"type": "string",
+			"metadata": {
+				"description": "Compute API version"
+			}
+		},
+		"apiVersionLinkTemplate": {
+			"type": "string",
+			"metadata": {
+				"description": "Link Template API version"
+			}
+		},
+		"subnetCreateTemplateUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Subnet Create Template URL"
+			}
+		},
+		"diagStorageAccount": {
+			"type": "string",
+			"metadata": {
+				"description": "Diagnostics storage account name"
+			}
+		},
+		"openshiftClusterPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift cluster prefix"
+			}
+		},
+		"simplifiedClusterPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "Simplified cluster prefix with no hyphens and all lowercase"
+			}
+		},
+		"openshiftNodeHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "Compute node hostname"
+			}
+		},
+		"availabilitySetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Availability set name"
+			}
+		},
+		"virtualNetworkResourceGroupName": {
+			"type": "string",
+			"metadata": {
+				"description": "Availability set name"
+			}
+		},
+		"existingVnetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Availability set name"
+			}
+		},
+		"subnetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Availability set name"
+			}
+		},
+		"subnetPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "Availability set name"
+			}
+		},
+		"nodeFirstAddrOctet4": {
+			"type": "int",
+			"metadata": {
+				"description": "Node first IP address"
+			}
+		},
+		"nodeFirstAddrPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "Node first IP address prefix"
+			}
+		},
+		"enableNodeAcceleratedNetworking": {
+			"type": "string",
+			"metadata": {
+				"description": "Enable accelerated networking for compute node"
+			}
+		},
+		"nodeInstanceCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Node count"
+			}
+		},
+		"customTags": {
+			"type": "object",
+			"metadata": {
+				"description": "Custom Tags"
+			}
+		}
+	},
+	"variables": {
+	},
+	"resources": [
+		{
+			"type": "Microsoft.Storage/storageAccounts",
+			"name": "[parameters('diagStorageAccount')]",
+			"location": "[parameters('location')]",
+			"kind": "Storage",
+			"apiVersion": "[parameters('apiVersionStorage')]",
+			"tags": "[parameters('customTags')]",
+			"sku": {
+				"name": "Standard_LRS",
+				"tier": "Standard"
+			}
+		}, {
+			"apiVersion": "[parameters('apiVersionNetwork')]",
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"name": "[concat(parameters('openshiftClusterPrefix'), '-Nsg-Osca-01')]",
+			"location": "[parameters('location')]",
+			"tags": "[parameters('customTags')]",
+			"properties": {
+				"securityRules": [{
+					"name": "allowSSHin_all",
+					"properties": {
+						"description": "Allow SSH in from all locations",
+						"protocol": "Tcp",
+						"sourcePortRange": "*",
+						"destinationPortRange": "22",
+						"sourceAddressPrefix": "*",
+						"destinationAddressPrefix": "*",
+						"access": "Allow",
+						"priority": 100,
+						"direction": "Inbound"
+					}
+				}, {
+					"name": "allowHTTPS_all",
+					"properties": {
+						"description": "Allow HTTPS connections from all locations",
+						"protocol": "Tcp",
+						"sourcePortRange": "*",
+						"destinationPortRange": "443",
+						"sourceAddressPrefix": "*",
+						"destinationAddressPrefix": "*",
+						"access": "Allow",
+						"priority": 200,
+						"direction": "Inbound"
+					}
+				}, {
+					"name": "allowHTTPIn_all",
+					"properties": {
+						"description": "Allow HTTP connections from all locations",
+						"protocol": "Tcp",
+						"sourcePortRange": "*",
+						"destinationPortRange": "80",
+						"sourceAddressPrefix": "*",
+						"destinationAddressPrefix": "*",
+						"access": "Allow",
+						"priority": 300,
+						"direction": "Inbound"
+					}
+				}]
+			}
+		}, {
+			"name": "CreateNodeSubnet",
+			"type": "Microsoft.Resources/deployments",
+			"resourceGroup": "[parameters('virtualNetworkResourceGroupName')]",
+			"apiVersion": "[parameters('apiVersionLinkTemplate')]",
+			"dependsOn": [
+				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Osca-01')]"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[parameters('subnetCreateTemplateUrl')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[parameters('location')]"
+					},
+					"apiVersionNetwork": {
+						"value": "[parameters('apiVersionNetwork')]"
+					},
+					"existingVnetName": {
+						"value": "[parameters('existingVnetName')]"
+					},
+					"subnetName": {
+						"value": "[parameters('subnetName')]"
+					},
+					"subnetPrefix": {
+						"value": "[parameters('subnetPrefix')]"
+					},
+					"networkSecurityGroup": {
+						"value": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups/', concat(parameters('openshiftClusterPrefix'), '-Nsg-Osca-01'))]"
+					}
+				}
+			}
+		}, {
+			"type": "Microsoft.Compute/availabilitySets",
+			"name": "[parameters('availabilitySetName')]",
+			"location": "[parameters('location')]",
+			"apiVersion": "[parameters('apiVersionCompute')]",
+			"sku": {
+				"name": "Aligned"
+			},
+			"properties": {
+				"platformFaultDomainCount": "2",
+				"platformUpdateDomainCount": "5"
+			},
+			"tags": "[parameters('customTags')]"
+		}, {
+			"type": "Microsoft.Network/networkInterfaces",
+			"name": "[concat(parameters('openshiftNodeHostname'), padLeft(add(copyindex(), 1), 2, '0'), '-nic-01')]",
+			"location": "[parameters('location')]",
+			"apiVersion": "[parameters('apiVersionNetwork')]",
+			"tags": "[parameters('customTags')]",
+			"dependsOn": [
+				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Osca-01')]",
+				"CreateNodeSubnet"
+			],
+			"copy": {
+				"name": "nodeNicLoop",
+				"count": "[parameters('nodeInstanceCount')]"
+			},
+			"properties": {
+				"ipConfigurations": [{
+					"name": "[concat(parameters('openshiftNodeHostname'), padLeft(add(copyindex(), 1), 2, '0'), 'ipconfig')]",
+					"properties": {
+						"privateIPAllocationMethod": "Static",
+						"privateIPAddress": "[concat(parameters('nodeFirstAddrPrefix'), copyindex(parameters('nodeFirstAddrOctet4')))]",
+						"subnet": {
+							"id": "[resourceId(parameters('virtualNetworkResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('existingVnetName'), parameters('subnetName'))]"
+						}
+					}
+				}],
+				"enableAcceleratedNetworking": "[parameters('enableNodeAcceleratedNetworking')]"
+			}
+		}
+	],
+	"outputs": {
+		"storageUri": {
+			"type": "string",
+			"value": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', parameters('diagStorageAccount')), parameters('apiVersionStorage')).primaryEndpoints['blob']))]"
+		}
+	}
+}

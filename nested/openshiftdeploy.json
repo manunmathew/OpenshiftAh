@@ -1,0 +1,307 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"location": {
+			"type": "string",
+			"metadata": {
+				"description": "Datacenter Region Location"
+			}
+		},
+		"tenantId": {
+			"type": "string",
+			"metadata": {
+				"description": "Tenant ID"
+			}
+		},
+		"subscriptionId": {
+			"type": "string",
+			"metadata": {
+				"description": "Subscription ID"
+			}
+		},
+		"resourceGroupName": {
+			"type": "string",
+			"metadata": {
+				"description": "Resource Group Name"
+			}
+		},
+		"apiVersionCompute": {
+			"type": "string",
+			"metadata": {
+				"description": "API version for compute resources"
+			}
+		},
+		"openshiftDeploymentScriptUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Bastion prep script Url"
+			}
+		},
+		"openshiftDeploymentScriptFileName": {
+			"type": "string",
+			"metadata": {
+				"description": "Bastion prep script file name"
+			}
+		},
+		"newStorageAccountRegistry": {
+			"type": "string",
+			"metadata": {
+				"description": "Storage Account for Docker Registry"
+			}
+		},
+		"newStorageAccountRegistryKey": {
+			"type": "securestring",
+			"metadata": {
+				"description": "Storage Account Key for Docker Registry"
+			}
+		},
+		"openshiftBastionHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Bastion hostname"
+			}
+		},
+		"openshiftMasterHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Master hostname"
+			}
+		},
+		"openshiftMasterPublicIpFqdn": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Master VM public IP fully qualified domain name"
+			}
+		},
+		"openshiftMasterPublicIpAddress": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Master VM public IP address"
+			}
+		},
+		"openshiftInfraHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Infra Node hostname"
+			}
+		},
+		"openshiftCnsHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift CNS Node hostname"
+			}
+		},
+		"openshiftToolsNodeHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Tools Node hostname"
+			}
+		},
+		"openshiftProductionNodeHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Production Node hostname"
+			}
+		},
+		"openshiftAcceptanceNodeHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Acceptance Node hostname"
+			}
+		},
+		"masterInstanceCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of OpenShift Master nodes"
+			}
+		},
+		"infraInstanceCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of OpenShift Infra nodes"
+			}
+		},
+		"cnsInstanceCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of CNS nodes"
+			}
+		},
+		"toolsNodeInstanceCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of Tools compute nodes"
+			}
+		},
+		"productionNodeInstanceCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of Production compute nodes"
+			}
+		},
+		"acceptanceNodeInstanceCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of Acceptance compute nodes"
+			}
+		},
+		"storageKind": {
+			"type": "string",
+			"metadata": {
+				"description": "Managed or unmanaged disk"
+			}
+		},
+		"adminUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "Administrator username on all VMs"
+			}
+		},
+		"openshiftPassword": {
+			"type": "securestring",
+			"metadata": {
+				"description": "Administrator password for OpenShift Console"
+			}
+		},
+		"enableCNS": {
+			"type": "string",
+			"metadata": {
+				"description": "Enable Container Native Storage: true or false"
+			}
+		},
+		"enableMetrics": {
+			"type": "string",
+			"metadata": {
+				"description": "Enable OpenShift Metrics: true or false"
+			}
+		},
+		"enableLogging": {
+			"type": "string",
+			"metadata": {
+				"description": "Enable OpenShift Logging: true or false"
+			}
+		},
+		"enableAzure": {
+			"type": "string",
+			"metadata": {
+				"description": "Enable Azure: true or false"
+			}
+		},
+		"aadClientId": {
+			"type": "string",
+			"metadata": {
+				"description": "Azure AD Client ID"
+			}
+		},
+		"aadClientSecret": {
+			"type": "securestring",
+			"metadata": {
+				"description": "Azure AD Client Secret"
+			}
+		},
+		"domainName": {
+			"type": "string",
+			"metadata": {
+				"description": "Domain name search"
+			}
+		},
+		"nipioDomain": {
+			"type": "string",
+			"metadata": {
+				"description": "nip.io Subdomain for application routing"
+			}
+		},
+		"customDomain": {
+			"type": "string",
+			"metadata": {
+				"description": "custom Subdomain for application routing"
+			}
+		},
+		"subDomainChosen": {
+			"type": "string",
+			"metadata": {
+				"description": "Subdomain chosen for application routing"
+			}
+		},
+		"customTags": {
+			"type": "object",
+			"metadata": {
+				"description": "Custom Tags"
+			}
+		},
+		"virtualNetworkName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the Virtual Network"
+			}
+		},
+		"nodeNetworkSecurityGroup": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of Node Network Security Group"
+			}
+		},
+		"nodeAvailabilitySet": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of Node Availability Set"
+			}
+		},
+		"masterClusterType": {
+			"type": "string",
+			"metadata": {
+				"description": "Cluster Type"
+			}
+		},
+		"masterPrivateClusterIp": {
+			"type": "string",
+			"metadata": {
+				"description": "Private IP Address"
+			}
+		},
+		"masterClusterDns": {
+			"type": "string",
+			"metadata": {
+				"description": "Master Cluster DNS name"
+			}
+		},
+		"routingCertType": {
+			"type": "string",
+			"metadata": {
+				"description": "Use custom certificate for routing domain or self-signed certificate"
+			}
+		},
+		"masterCertType": {
+			"type": "string",
+			"metadata": {
+				"description": "Use custom certificate for master domain or self-signed certificate"
+			}
+		}
+	},
+	"variables": {
+		"singlequote": "'"
+	},
+	"resources": [{
+		"type": "Microsoft.Compute/virtualMachines/extensions",
+		"name": "[concat(parameters('openshiftBastionHostname'), '/deployOpenShift')]",
+		"location": "[parameters('location')]",
+		"apiVersion": "[parameters('apiVersionCompute')]",
+		"tags": "[parameters('customTags')]",
+		"properties": {
+			"publisher": "Microsoft.Azure.Extensions",
+			"type": "CustomScript",
+			"typeHandlerVersion": "2.0",
+			"autoUpgradeMinorVersion": true,
+			"settings": {
+				"fileUris": [
+					"[parameters('openshiftDeploymentScriptUrl')]"
+				]
+			},
+			"protectedSettings": {
+				"commandToExecute": "[concat('bash ', parameters('openshiftDeploymentScriptFileName'), ' ', variables('singlequote'), parameters('adminUsername'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftPassword'), variables('singlequote'), ' ', variables('singlequote'),  parameters('openshiftMasterHostname'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftMasterPublicIpFqdn'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftMasterPublicIpAddress'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftInfraHostname'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftToolsNodeHostname'), variables('singlequote'), ' ', variables('singlequote'), parameters('toolsNodeInstanceCount'), variables('singlequote'), ' ', variables('singlequote'), parameters('infraInstanceCount'), variables('singlequote'), ' ', variables('singlequote'), parameters('MasterInstanceCount'), variables('singlequote'), ' ', variables('singlequote'), parameters(parameters('subDomainChosen')), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountRegistry'), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountRegistryKey'), variables('singlequote'), ' ', variables('singlequote'), parameters('enableMetrics'), variables('singlequote'), ' ', variables('singlequote'), parameters('enableLogging'), variables('singlequote'), ' ', variables('singlequote'), parameters('tenantId'), variables('singlequote'), ' ', variables('singlequote'), parameters('subscriptionId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientSecret'), variables('singlequote'), ' ', variables('singlequote'), parameters('resourceGroupName'), variables('singlequote'), ' ', variables('singlequote'), parameters('location'), variables('singlequote'), ' ', variables('singlequote'), parameters('enableAzure'), variables('singlequote'), ' ', variables('singlequote'), parameters('storageKind'), variables('singlequote'), ' ', variables('singlequote'), parameters('enableCNS'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftCnsHostname'), variables('singlequote'),' ', variables('singlequote'), parameters('cnsInstanceCount'), variables('singlequote'), ' ', variables('singlequote'), parameters('virtualNetworkName'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeNetworkSecurityGroup'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeAvailabilitySet'), variables('singlequote'), ' ', variables('singlequote'), parameters('masterClusterType'), variables('singlequote'), ' ', variables('singlequote'), parameters('masterPrivateClusterIp'), variables('singlequote'), ' ', variables('singlequote'), parameters('masterClusterDns'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftProductionNodeHostname'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftAcceptanceNodeHostname'), variables('singlequote'), ' ', variables('singlequote'), parameters('routingCertType'), variables('singlequote'), ' ', variables('singlequote'), parameters('masterCertType'), variables('singlequote'), ' ', variables('singlequote'), parameters('productionNodeInstanceCount'), variables('singlequote'), ' ', variables('singlequote'), parameters('acceptanceNodeInstanceCount'), variables('singlequote'), ' ', variables('singlequote'), parameters('domainName'), variables('singlequote'))]"
+			}
+		}
+	}],
+	"outputs": {}
+}

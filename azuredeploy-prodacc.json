@@ -221,6 +221,14 @@
 				"description": "Size of Datadisk in GB for Docker volume"
 			}
 		},
+		"glusterDiskSize": {
+			"type": "int",
+			"defaultValue": 256,
+			"allowedValues": [128, 256, 512, 1024, 2048],
+			"metadata": {
+				"description": "Size of Datadisk in GB for gluster voluems on CNS nodes"
+			}
+		},
 		"adminUsername": {
 			"type": "string",
 			"defaultValue": "ocpadmin",
@@ -230,10 +238,10 @@
 			}
 		},
 		"openshiftPassword": {
-			"type": "securestring",
+			"type": "string",
 			"minLength": 5,
 			"metadata": {
-				"description": "Password for OpenShift user to login to OpenShift Console"
+				"description": "KeyVault secret name containing Password for OpenShift user to login to OpenShift Console"
 			}
 		},
 		"enableMetrics": {
@@ -274,10 +282,10 @@
 			}
 		},
 		"rhsmPasswordOrActivationKey": {
-			"type": "securestring",
+			"type": "string",
 			"minLength": 1,
 			"metadata": {
-				"description": "Red Hat Subscription Manager Password or Activation Key. To find or create your Activation Key, go to: https://access.redhat.com/management/activation_keys"
+				"description": "KeyVault secret name containing Red Hat Subscription Manager Password or Activation Key. To find or create your Activation Key, go to: https://access.redhat.com/management/activation_keys"
 			}
 		},
 		"rhsmPoolId": {
@@ -336,10 +344,10 @@
 			}
 		},
 		"aadClientSecret": {
-			"type": "securestring",
+			"type": "string",
 			"defaultValue": "",
 			"metadata": {
-				"description": "Azure AD Client Secret"
+				"description": "KeyVault secret name containing Azure AD Client Secret"
 			}
 		},
 		"domainName": {
@@ -776,7 +784,6 @@
 			"name": "[parameters('marketplaceOsImage').sku]"
 		},
 		"bastionVmSize": "Standard_D2s_v3",
-		"glusterDiskSize": 256,
 		"singlequote": "'",
 		"sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
 		"bastionPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/bastionPrep.sh')]",
@@ -1861,7 +1868,7 @@
 						"value": "[parameters('dataDiskSize')]"
 					},
 					"glusterDiskSize": {
-						"value": "[variables('glusterDiskSize')]"
+						"value": "[parameters('glusterDiskSize')]"
 					},
 					"adminUsername": {
 						"value": "[parameters('adminUsername')]"
@@ -2188,7 +2195,12 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"value": "[parameters('rhsmPasswordOrActivationKey')]"
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+						}
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmBrokerPoolId')]"
@@ -2302,7 +2314,12 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"value": "[parameters('rhsmPasswordOrActivationKey')]"
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+						}
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmBrokerPoolId')]"
@@ -2351,7 +2368,12 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"value": "[parameters('rhsmPasswordOrActivationKey')]"
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+						}
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmBrokerPoolId')]"
@@ -2400,7 +2422,12 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"value": "[parameters('rhsmPasswordOrActivationKey')]"
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+						}
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmPoolId')]"
@@ -2449,7 +2476,12 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"value": "[parameters('rhsmPasswordOrActivationKey')]"
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+						}
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmPoolId')]"
@@ -2498,7 +2530,12 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"value": "[parameters('rhsmPasswordOrActivationKey')]"
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+						}
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmPoolId')]"
@@ -2547,7 +2584,12 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"value": "[parameters('rhsmPasswordOrActivationKey')]"
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+						}
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmPoolId')]"
@@ -2659,7 +2701,12 @@
 						"value": "[parameters('adminUsername')]"
 					},
 					"openshiftPassword": {
-						"value": "[parameters('openshiftPassword')]"
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "[parameters('openshiftPassword')]"
+						}
 					},
 					"enableCNS": {
 						"value": "[parameters('enableCNS')]"
@@ -2677,7 +2724,12 @@
 						"value": "[parameters('aadClientId')]"
 					},
 					"aadClientSecret": {
-						"value": "[parameters('aadClientSecret')]"
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "[parameters('aadClientSecret')]"
+						}
 					},
 					"domainName": {
 						"value": "[parameters('domainName')]"

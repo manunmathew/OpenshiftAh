@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo $(date) " - Starting Script"
+echo $(date) " - Starting OpenShift Deployment Script"
 
 set -e
 
@@ -72,11 +72,9 @@ sed -i -e '/Defaults    env_keep += "LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSE
 # Create docker registry config based on Commercial Azure or Azure Government
 if [[ $CLOUD == "US" ]]
 then
-    DOCKERREGISTRYYAML=dockerregistrygov.yaml
-    export CLOUDNAME="AzureUSGovernmentCloud"
+    export DOCKERREGISTRYREALM="core.usgovcloudapi.net"
 else
-    DOCKERREGISTRYYAML=dockerregistrypublic.yaml
-    export CLOUDNAME="AzurePublicCloud"
+    export DOCKERREGISTRYREALM="core.windows.net"
 fi
 
 # Setting the default openshift_cloudprovider_kind if Azure enabled
@@ -386,7 +384,7 @@ $ROUTINGCERTIFICATE
 $MASTERCERTIFICATE
 
 # Custom node group definitions
-openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true']}, {'name': 'node-config-compute-cns', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=cns']}, {'name': 'node-config-compute-tools', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=ToolsProduction']}, {'name': 'node-config-compute-acceptance', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Acceptance']}, {'name': 'node-config-compute-production', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Production']}]
+openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true']}, {'name': 'node-config-compute-cns', 'labels': ['nodepool=cns']}, {'name': 'node-config-compute-tools', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=ToolsProduction']}, {'name': 'node-config-compute-acceptance', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Acceptance']}, {'name': 'node-config-compute-production', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Production']}]
 
 # Workaround for docker image failure
 # https://access.redhat.com/solutions/3480921
@@ -404,7 +402,7 @@ openshift_hosted_registry_storage_provider=azure_blob
 openshift_hosted_registry_storage_azure_blob_accountname=$REGISTRYSA
 openshift_hosted_registry_storage_azure_blob_accountkey=$ACCOUNTKEY
 openshift_hosted_registry_storage_azure_blob_container=registry
-openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
+openshift_hosted_registry_storage_azure_blob_realm=$DOCKERREGISTRYREALM
 
 # Deploy Service Catalog
 openshift_enable_service_catalog=false
@@ -519,35 +517,6 @@ runuser $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-play
 # Assigning cluster admin rights to OpenShift user
 echo $(date) " - Assigning cluster admin rights to user"
 runuser $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/assignclusteradminrights.yaml"
-
-# Configure Docker Registry to use Azure Storage Account
-# echo $(date) " - Configuring Docker Registry to use Azure Storage Account"
-# runuser $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/$DOCKERREGISTRYYAML"
-
-# Reconfigure glusterfs storage class
-# if [ $CNS_DEFAULT_STORAGE == "true" ]
-# then
-    # echo $(date) "- Create default glusterfs storage class"
-    # cat > /home/$SUDOUSER/default-glusterfs-storage.yaml <<EOF
-# apiVersion: storage.k8s.io/v1
-# kind: StorageClass
-# metadata:
-  # annotations:
-    # storageclass.kubernetes.io/is-default-class: "$CNS_DEFAULT_STORAGE"
-  # name: default-glusterfs-storage
-# parameters:
-  # resturl: http://heketi-storage-glusterfs.${ROUTING}
-  # restuser: admin
-  # secretName: heketi-storage-admin-secret
-  # secretNamespace: glusterfs
-# provisioner: kubernetes.io/glusterfs
-# reclaimPolicy: Delete
-# EOF
-    # runuser -l $SUDOUSER -c "oc create -f /home/$SUDOUSER/default-glusterfs-storage.yaml"
-
-    # echo $(date) " - Sleep for 10"
-    # sleep 10
-# fi
 
 # Adding some labels back because they go missing
 echo $(date) " - Adding api and logging labels"

@@ -237,13 +237,6 @@
 				"description": "Administrator username on all VMs and first user created for OpenShift login"
 			}
 		},
-		"openshiftPassword": {
-			"type": "string",
-			"minLength": 5,
-			"metadata": {
-				"description": "KeyVault secret name containing Password for OpenShift user to login to OpenShift Console"
-			}
-		},
 		"enableMetrics": {
 			"type": "string",
 			"defaultValue": "false",
@@ -279,13 +272,6 @@
 			"minLength": 1,
 			"metadata": {
 				"description": "Red Hat Subscription Manager Username or Organization ID. To find your Organization ID, run on registered server: subscription-manager identity"
-			}
-		},
-		"rhsmPasswordOrActivationKey": {
-			"type": "string",
-			"minLength": 1,
-			"metadata": {
-				"description": "KeyVault secret name containing Red Hat Subscription Manager Password or Activation Key. To find or create your Activation Key, go to: https://access.redhat.com/management/activation_keys"
 			}
 		},
 		"rhsmPoolId": {
@@ -326,12 +312,6 @@
 				"description": "Name of the Key Vault"
 			}
 		},
-		"keyVaultSecret": {
-			"type": "string",
-			"metadata": {
-				"description": "Key Vault Secret Name that contains the Private Key"
-			}
-		},
 		"enableAzure": {
 			"type": "string",
 			"defaultValue": "true",
@@ -347,13 +327,6 @@
 			"defaultValue": "",
 			"metadata": {
 				"description": "Azure AD Client ID"
-			}
-		},
-		"aadClientSecret": {
-			"type": "string",
-			"defaultValue": "",
-			"metadata": {
-				"description": "KeyVault secret name containing Azure AD Client Secret"
 			}
 		},
 		"domainName": {
@@ -2205,7 +2178,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+							"secretName": "activationKey"
 						}
 					},
 					"rhsmPoolId": {
@@ -2216,7 +2189,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('keyVaultSecret')]"
+							"secretName": "sshPrivateKey"
 						}
 					},
 					"routingCertType": {
@@ -2230,7 +2203,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcafile', parameters('keyVaultSecret'))]"
+							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcafile', 'sshPrivateKey')]"
 						}
 					},
 					"customRoutingCertFile": {
@@ -2238,7 +2211,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcertfile', parameters('keyVaultSecret'))]"
+							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcertfile', 'sshPrivateKey')]"
 						}
 					},
 					"customRoutingKeyFile": {
@@ -2246,7 +2219,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingkeyfile', parameters('keyVaultSecret'))]"
+							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingkeyfile', 'sshPrivateKey')]"
 						}
 					},
 					"customMasterCaFile": {
@@ -2254,7 +2227,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercafile', parameters('keyVaultSecret'))]"
+							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercafile', 'sshPrivateKey')]"
 						}
 					},
 					"customMasterCertFile": {
@@ -2262,7 +2235,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercertfile', parameters('keyVaultSecret'))]"
+							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercertfile', 'sshPrivateKey')]"
 						}
 					},
 					"customMasterKeyFile": {
@@ -2270,7 +2243,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'masterkeyfile', parameters('keyVaultSecret'))]"
+							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'masterkeyfile', 'sshPrivateKey')]"
 						}
 					},
 					"customTags": {
@@ -2324,7 +2297,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+							"secretName": "activationKey"
 						}
 					},
 					"rhsmPoolId": {
@@ -2378,7 +2351,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+							"secretName": "activationKey"
 						}
 					},
 					"rhsmPoolId": {
@@ -2432,7 +2405,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+							"secretName": "activationKey"
 						}
 					},
 					"rhsmPoolId": {
@@ -2486,7 +2459,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+							"secretName": "activationKey"
 						}
 					},
 					"rhsmPoolId": {
@@ -2540,7 +2513,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+							"secretName": "activationKey"
 						}
 					},
 					"rhsmPoolId": {
@@ -2594,7 +2567,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('rhsmPasswordOrActivationKey')]"
+							"secretName": "activationKey"
 						}
 					},
 					"rhsmPoolId": {
@@ -2711,7 +2684,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('openshiftPassword')]"
+							"secretName": "openshiftPassword"
 						}
 					},
 					"enableCNS": {
@@ -2734,7 +2707,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[parameters('aadClientSecret')]"
+							"secretName": "aadClientSecret"
 						}
 					},
 					"domainName": {

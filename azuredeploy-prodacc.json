@@ -1434,6 +1434,12 @@
 					"nodeInstanceCount": {
 						"value": "[parameters('toolsNodeInstanceCount')]"
 					},
+					"nameSuffix": {
+						"value": "01"
+					},
+					"hostSuffix": {
+						"value": "0"
+					},
 					"customTags": {
 						"value": "[parameters('productionCustomTags')]"
 					}
@@ -1511,6 +1517,12 @@
 					"nodeInstanceCount": {
 						"value": "[parameters('productionNodeInstanceCount')]"
 					},
+					"nameSuffix": {
+						"value": "01"
+					},
+					"hostSuffix": {
+						"value": "0"
+					},
 					"customTags": {
 						"value": "[parameters('productionCustomTags')]"
 					}
@@ -1587,6 +1599,12 @@
 					},
 					"nodeInstanceCount": {
 						"value": "[parameters('acceptanceNodeInstanceCount')]"
+					},
+					"nameSuffix": {
+						"value": "01"
+					},
+					"hostSuffix": {
+						"value": "0"
 					},
 					"customTags": {
 						"value": "[parameters('acceptanceCustomTags')]"

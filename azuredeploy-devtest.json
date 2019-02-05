@@ -1352,10 +1352,10 @@
 					},
 					"nameSuffix": {
 						"value": "11"
-					}
+					},
 					"hostSuffix": {
 						"value": "1"
-					}
+					},
 					"customTags": {
 						"value": "[parameters('testCustomTags')]"
 					}
@@ -1434,6 +1434,12 @@
 					"nodeInstanceCount": {
 						"value": "[parameters('toolsNodeInstanceCount')]"
 					},
+					"nameSuffix": {
+						"value": "11"
+					},
+					"hostSuffix": {
+						"value": "1"
+					},
 					"customTags": {
 						"value": "[parameters('testCustomTags')]"
 					}
@@ -1511,6 +1517,12 @@
 					"nodeInstanceCount": {
 						"value": "[parameters('testNodeInstanceCount')]"
 					},
+					"nameSuffix": {
+						"value": "01"
+					},
+					"hostSuffix": {
+						"value": "0"
+					},
 					"customTags": {
 						"value": "[parameters('testCustomTags')]"
 					}
@@ -1587,6 +1599,12 @@
 					},
 					"nodeInstanceCount": {
 						"value": "[parameters('developmentNodeInstanceCount')]"
+					},
+					"nameSuffix": {
+						"value": "01"
+					},
+					"hostSuffix": {
+						"value": "0"
 					},
 					"customTags": {
 						"value": "[parameters('developmentCustomTags')]"

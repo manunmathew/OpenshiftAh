@@ -1350,6 +1350,12 @@
 					"cnsInstanceCount": {
 						"value": "[parameters('cnsInstanceCount')]"
 					},
+					"nameSuffix": {
+						"value": "11"
+					}
+					"hostSuffix": {
+						"value": "1"
+					}
 					"customTags": {
 						"value": "[parameters('testCustomTags')]"
 					}
@@ -1470,7 +1476,7 @@
 						"value": "[variables('diagStorageAccountTst')]"
 					},
 					"openshiftClusterPrefix": {
-						"value": "[concat(parameters('openshiftClusterPrefix2'), '-Prd')]"
+						"value": "[concat(parameters('openshiftClusterPrefix2'), '-Tst')]"
 					},
 					"simplifiedClusterPrefix": {
 						"value": "[variables('simplifiedClusterPrefix2')]"
@@ -1547,7 +1553,7 @@
 						"value": "[variables('diagStorageAccountD')]"
 					},
 					"openshiftClusterPrefix": {
-						"value": "[concat(parameters('openshiftClusterPrefix2'), '-Acc')]"
+						"value": "[concat(parameters('openshiftClusterPrefix2'), '-Dev)]"
 					},
 					"simplifiedClusterPrefix": {
 						"value": "[variables('simplifiedClusterPrefix2')]"
@@ -2252,13 +2258,13 @@
 				}
 			}
 		}, {
-			"name": "[concat('MasterPrep', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('MasterPrep', padLeft(add(copyIndex(), 1), 2, '1'))]",
 			"type": "Microsoft.Resources/deployments",
 			"resourceGroup": "[parameters('coreinfrastructureResourceGroup')]",
             "subscriptionId": "[parameters('coreinfrastructureSubscriptionID')]",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[concat('masterVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]"
+				"[concat('masterVmDeployment', padLeft(add(copyIndex(), 1), 2, '1'))]"
 			],
 			"copy": {
 				"name": "masterPrepLoop",
@@ -2284,7 +2290,7 @@
 						"value": "[variables('masterPrepScriptFileName')]"
 					},
 					"openshiftMasterHostname": {
-						"value": "[concat(variables('openshiftMasterHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftMasterHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"
 					},
 					"adminUsername": {
 						"value": "[parameters('adminUsername')]"
@@ -2309,13 +2315,13 @@
 				}
 			}
 		}, {
-			"name": "[concat('InfraPrep', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('InfraPrep', padLeft(add(copyIndex(), 1), 2, '1'))]",
 			"type": "Microsoft.Resources/deployments",
 			"resourceGroup": "[parameters('coreinfrastructureResourceGroup')]",
             "subscriptionId": "[parameters('coreinfrastructureSubscriptionID')]",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[concat('infraVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]"
+				"[concat('infraVmDeployment', padLeft(add(copyIndex(), 1), 2, '1'))]"
 			],
 			"copy": {
 				"name": "infraPrepLoop",
@@ -2341,7 +2347,7 @@
 						"value": "[variables('nodePrepScriptFileName')]"
 					},
 					"openshiftNodeHostname": {
-						"value": "[concat(variables('openshiftInfraHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftInfraHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"
 					},
 					"rhsmUsernameOrOrgId": {
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
@@ -2363,13 +2369,13 @@
 				}
 			}
 		}, {
-			"name": "[concat('CNSPrep', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('CNSPrep', padLeft(add(copyIndex(), 1), 2, '1'))]",
 			"type": "Microsoft.Resources/deployments",
 			"resourceGroup": "[parameters('coreinfrastructureResourceGroup')]",
             "subscriptionId": "[parameters('coreinfrastructureSubscriptionID')]",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[concat('cnsVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]"
+				"[concat('cnsVmDeployment', padLeft(add(copyIndex(), 1), 2, '1'))]"
 			],
 			"copy": {
 				"name": "cnsPrepLoop",
@@ -2395,7 +2401,7 @@
 						"value": "[variables('nodePrepScriptFileName')]"
 					},
 					"openshiftNodeHostname": {
-						"value": "[concat(variables('openshiftCnsHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftCnsHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"
 					},
 					"rhsmUsernameOrOrgId": {
 						"value": "[parameters('rhsmUsernameOrOrgId')]"

@@ -326,6 +326,18 @@
 				"description": "CNS count"
 			}
 		},
+		"nameSuffix": {
+			"type": "string",
+			"metadata": {
+				"description": "Suffix to append to resource names"
+			}
+		},
+		"hostSuffix": {
+			"type": "string",
+			"metadata": {
+				"description": "Suffix to append to host names"
+			}
+		},
 		"customTags": {
 			"type": "object",
 			"metadata": {
@@ -365,7 +377,7 @@
 		}, {
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"type": "Microsoft.Network/networkSecurityGroups",
-			"name": "[concat(parameters('openshiftClusterPrefix'), '-Nsg-Oscm-01')]",
+			"name": "[concat(parameters('openshiftClusterPrefix'), '-Nsg-Oscm-', parameters('nameSuffix'))]",
 			"location": "[parameters('location')]",
 			"tags": "[parameters('customTags')]",
 			"properties": {
@@ -400,7 +412,7 @@
 		}, {
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"type": "Microsoft.Network/networkSecurityGroups",
-			"name": "[concat(parameters('openshiftClusterPrefix'), '-Nsg-Osci-01')]",
+			"name": "[concat(parameters('openshiftClusterPrefix'), '-Nsg-Osci-', parameters('nameSuffix'))]",
 			"location": "[parameters('location')]",
 			"tags": "[parameters('customTags')]",
 			"properties": {
@@ -448,7 +460,7 @@
 		}, {
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"type": "Microsoft.Network/networkSecurityGroups",
-			"name": "[concat(parameters('openshiftClusterPrefix'), '-Nsg-Oscc-01')]",
+			"name": "[concat(parameters('openshiftClusterPrefix'), '-Nsg-Oscc-', parameters('nameSuffix'))]",
 			"location": "[parameters('location')]",
 			"tags": "[parameters('customTags')]",
 			"properties": {
@@ -473,7 +485,7 @@
 			"resourceGroup": "[parameters('coreInfraVirtualNetworkResourceGroup')]",
 			"apiVersion": "[parameters('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscm-01')]"
+				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscm-', parameters('nameSuffix'))]"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -498,7 +510,7 @@
 						"value": "[parameters('masterSubnetPrefix')]"
 					},
 					"networkSecurityGroup": {
-						"value": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups/', concat(parameters('openshiftClusterPrefix'), '-Nsg-Oscm-01'))]"
+						"value": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups/', concat(parameters('openshiftClusterPrefix'), '-Nsg-Oscm-', parameters('nameSuffix')))]"
 					}
 				}
 			}
@@ -508,7 +520,7 @@
 			"resourceGroup": "[parameters('coreInfraVirtualNetworkResourceGroup')]",
 			"apiVersion": "[parameters('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Osci-01')]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Osci-', parameters('nameSuffix'))]",
 				"CreateMasterSubnet"
 			],
 			"properties": {
@@ -534,7 +546,7 @@
 						"value": "[parameters('infraSubnetPrefix')]"
 					},
 					"networkSecurityGroup": {
-						"value": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups/', concat(parameters('openshiftClusterPrefix'), '-Nsg-Osci-01'))]"
+						"value": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups/', concat(parameters('openshiftClusterPrefix'), '-Nsg-Osci-', parameters('nameSuffix')))]"
 					}
 				}
 			}
@@ -544,7 +556,7 @@
 			"resourceGroup": "[parameters('coreInfraVirtualNetworkResourceGroup')]",
 			"apiVersion": "[parameters('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscc-01')]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscc-', parameters('nameSuffix'))]",
 				"CreateInfraSubnet"
 			],
 			"properties": {
@@ -570,7 +582,7 @@
 						"value": "[parameters('cnsSubnetPrefix')]"
 					},
 					"networkSecurityGroup": {
-						"value": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups/', concat(parameters('openshiftClusterPrefix'), '-Nsg-Oscc-01'))]"
+						"value": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups/', concat(parameters('openshiftClusterPrefix'), '-Nsg-Oscc-', parameters('nameSuffix')))]"
 					}
 				}
 			}
@@ -772,13 +784,13 @@
 			}
 		}, {
 			"type": "Microsoft.Network/networkInterfaces",
-			"name": "[concat(parameters('openshiftMasterHostname'), padLeft(add(copyindex(), 1), 2, '0'), '-nic-01')]",
+			"name": "[concat(parameters('openshiftMasterHostname'), padLeft(add(copyindex(), 1), 2, parameters('hostSuffix')), '-nic-01')]",
 			"location": "[parameters('location')]",
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"tags": "[parameters('customTags')]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/loadBalancers/', parameters('masterLoadBalancerName'))]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscm-01')]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscm-', parameters('nameSuffix'))]",
 				"CreateMasterSubnet"
 			],
 			"copy": {
@@ -787,7 +799,7 @@
 			},
 			"properties": {
 				"ipConfigurations": [{
-					"name": "[concat(parameters('openshiftMasterHostname'), padLeft(add(copyindex(), 1), 2, '0'), 'ipconfig')]",
+					"name": "[concat(parameters('openshiftMasterHostname'), padLeft(add(copyindex(), 1), 2, parameters('hostSuffix')), 'ipconfig')]",
 					"properties": {
 						"privateIPAllocationMethod": "Static",
 						"privateIPAddress": "[concat(parameters('masterFirstAddrPrefix'), copyindex(parameters('masterFirstAddrOctet4')))]",
@@ -803,13 +815,13 @@
 			}
 		}, {
 			"type": "Microsoft.Network/networkInterfaces",
-			"name": "[concat(parameters('openshiftInfraHostname'), padLeft(add(copyindex(), 1), 2, '0'), '-nic-01')]",
+			"name": "[concat(parameters('openshiftInfraHostname'), padLeft(add(copyindex(), 1), 2, parameters('hostSuffix')), '-nic-01')]",
 			"location": "[parameters('location')]",
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"tags": "[parameters('customTags')]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/loadBalancers/', parameters('infraLoadBalancerName'))]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Osci-01')]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Osci-', parameters('nameSuffix'))]",
 				"CreateInfraSubnet"
 			],
 			"copy": {
@@ -818,7 +830,7 @@
 			},
 			"properties": {
 				"ipConfigurations": [{
-					"name": "[concat(parameters('openshiftInfraHostname'), padLeft(add(copyindex(), 1), 2, '0'), 'ipconfig')]",
+					"name": "[concat(parameters('openshiftInfraHostname'), padLeft(add(copyindex(), 1), 2, parameters('hostSuffix')), 'ipconfig')]",
 					"properties": {
 						"privateIPAllocationMethod": "Static",
 						"privateIPAddress": "[concat(parameters('infraFirstAddrPrefix'), copyindex(parameters('infraFirstAddrOctet4')))]",
@@ -834,12 +846,12 @@
 			}
 		}, {
 			"type": "Microsoft.Network/networkInterfaces",
-			"name": "[concat(parameters('openshiftCnsHostname'), padLeft(add(copyindex(), 1), 2, '0'), '-nic-01')]",
+			"name": "[concat(parameters('openshiftCnsHostname'), padLeft(add(copyindex(), 1), 2, parameters('hostSuffix')), '-nic-01')]",
 			"location": "[parameters('location')]",
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"tags": "[parameters('customTags')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscc-01')]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscc-', parameters('nameSuffix'))]",
 				"CreateCnsSubnet"
 			],
 			"copy": {
@@ -848,7 +860,7 @@
 			},
 			"properties": {
 				"ipConfigurations": [{
-					"name": "[concat(parameters('openshiftCnsHostname'), padLeft(add(copyindex(), 1), 2, '0'), 'ipconfig')]",
+					"name": "[concat(parameters('openshiftCnsHostname'), padLeft(add(copyindex(), 1), 2, parameters('hostSuffix')), 'ipconfig')]",
 					"properties": {
 						"privateIPAllocationMethod": "Static",
 						"privateIPAddress": "[concat(parameters('cnsFirstAddrPrefix'), copyindex(parameters('cnsFirstAddrOctet4')))]",

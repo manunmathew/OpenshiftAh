@@ -1350,6 +1350,12 @@
 					"cnsInstanceCount": {
 						"value": "[parameters('cnsInstanceCount')]"
 					},
+					"nameSuffix": {
+						"value": "01"
+					}
+					"hostSuffix": {
+						"value": "0"
+					}
 					"customTags": {
 						"value": "[parameters('productionCustomTags')]"
 					}

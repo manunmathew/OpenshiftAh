@@ -115,7 +115,7 @@
 				"description": "Enter the appropriate publisher, offer, sku and version values for the appropriate marketplace image you want to use."
 			}
 		},
-		"testCustomTags": {
+		"productionCustomTags": {
 			"type": "object",
 			"defaultValue": {
 				"applicationId": "Application ID",
@@ -127,7 +127,7 @@
 				"description": "Custom tags to apply to resources"
 			}
 		},
-		"developmentCustomTags": {
+		"acceptanceCustomTags": {
 			"type": "object",
 			"defaultValue": {
 				"applicationId": "Application ID",
@@ -189,7 +189,7 @@
 				"description": "Number of OpenShift cns nodes. 3 is default"
 			}
 		},
-		"developmentNodeInstanceCount": {
+		"acceptanceNodeInstanceCount": {
 			"type": "int",
 			"defaultValue": 2,
 			"allowedValues": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
@@ -197,7 +197,7 @@
 				"description": "Number of OpenShift nodes"
 			}
 		},
-		"testNodeInstanceCount": {
+		"productionNodeInstanceCount": {
 			"type": "int",
 			"defaultValue": 2,
 			"allowedValues": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
@@ -221,20 +221,19 @@
 				"description": "Size of Datadisk in GB for Docker volume"
 			}
 		},
-		"glusterDiskSize": {
-			"type": "int",
-			"defaultValue": 256,
-			"allowedValues": [128, 256, 512, 1024, 2048],
-			"metadata": {
-				"description": "Size of Datadisk in GB for gluster voluems on CNS nodes"
-			}
-		},
 		"adminUsername": {
 			"type": "string",
 			"defaultValue": "ocpadmin",
 			"minLength": 1,
 			"metadata": {
 				"description": "Administrator username on all VMs and first user created for OpenShift login"
+			}
+		},
+		"openshiftPassword": {
+			"type": "securestring",
+			"minLength": 5,
+			"metadata": {
+				"description": "Password for OpenShift user to login to OpenShift Console"
 			}
 		},
 		"enableMetrics": {
@@ -274,6 +273,13 @@
 				"description": "Red Hat Subscription Manager Username or Organization ID. To find your Organization ID, run on registered server: subscription-manager identity"
 			}
 		},
+		"rhsmPasswordOrActivationKey": {
+			"type": "securestring",
+			"minLength": 1,
+			"metadata": {
+				"description": "Red Hat Subscription Manager Password or Activation Key. To find or create your Activation Key, go to: https://access.redhat.com/management/activation_keys"
+			}
+		},
 		"rhsmPoolId": {
 			"type": "string",
 			"minLength": 1,
@@ -294,12 +300,6 @@
 				"description": "SSH public key for all VMs"
 			}
 		},
-		"keyVaultSubscriptionId": {
-			"type": "string",
-			"metadata": {
-				"description": "Subscription ID that contains the Key Vault"
-			}
-		},
 		"keyVaultResourceGroup": {
 			"type": "string",
 			"metadata": {
@@ -310,6 +310,12 @@
 			"type": "string",
 			"metadata": {
 				"description": "Name of the Key Vault"
+			}
+		},
+		"keyVaultSecret": {
+			"type": "string",
+			"metadata": {
+				"description": "Key Vault Secret Name that contains the Private Key"
 			}
 		},
 		"enableAzure": {
@@ -327,6 +333,13 @@
 			"defaultValue": "",
 			"metadata": {
 				"description": "Azure AD Client ID"
+			}
+		},
+		"aadClientSecret": {
+			"type": "securestring",
+			"defaultValue": "",
+			"metadata": {
+				"description": "Azure AD Client Secret"
 			}
 		},
 		"domainName": {
@@ -469,60 +482,60 @@
 				"description": "CIDR used for the tools subnet - needs to be a subset of the addressPrefix - default is 10.4.0.0/16"
 			}
 		},
-		"testVirtualNetworkName": {
+		"prodVirtualNetworkName": {
 			"type": "string",
-			"defaultValue": "testvnet",
+			"defaultValue": "prodvnet",
 			"metadata": {
-			"description": "Name of the vNet for test nodes"
+			"description": "Name of the vNet for production nodes"
 			}
 		},
-		"testVirtualNetworkResourceGroup": {
+		"prodVirtualNetworkResourceGroup": {
 			"type": "string",
-			"defaultValue": "testvnetrg",
+			"defaultValue": "prodvnetrg",
 			"metadata": {
-			"description": "Name of the test vNet resource group"
+			"description": "Name of the production vNet resource group"
 			}
 		},
-		"testSubnetName": {
+		"prodSubnetName": {
 			"type": "string",
-			"defaultValue": "testsubnet",
+			"defaultValue": "prodsubnet",
 			"metadata": {
-				"description": "Name of the subnet for test nodes"
+				"description": "Name of the subnet for production nodes"
 			}
 		},
-		"testSubnetPrefix": {
+		"prodSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "10.5.0.0/16",
 			"metadata": {
-				"description": "CIDR used for the test subnet - needs to be a subset of the addressPrefix - default is 10.5.0.0/16"
+				"description": "CIDR used for the production subnet - needs to be a subset of the addressPrefix - default is 10.5.0.0/16"
 			}
 		},
-		"devVirtualNetworkName": {
+		"accVirtualNetworkName": {
 			"type": "string",
-			"defaultValue": "devvnet",
+			"defaultValue": "accvnet",
 			"metadata": {
-			"description": "Name of the vNet for development nodes"
+			"description": "Name of the vNet for acceptance nodes"
 			}
 		},
-		"devVirtualNetworkResourceGroup": {
+		"accVirtualNetworkResourceGroup": {
 			"type": "string",
-			"defaultValue": "devvnetrg",
+			"defaultValue": "accvnetrg",
 			"metadata": {
-			"description": "Name of the development vNet resource group"
+			"description": "Name of the acceptance vNet resource group"
 			}
 		},
-		"devSubnetName": {
+		"accSubnetName": {
 			"type": "string",
-			"defaultValue": "devsubnet",
+			"defaultValue": "accsubnet",
 			"metadata": {
-				"description": "Name of the subnet for development nodes"
+				"description": "Name of the subnet for acceptance nodes"
 		  }
 		},
-		"devSubnetPrefix": {
+		"accSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "10.6.0.0/16",
 			"metadata": {
-				"description": "CIDR used for the development node subnet - needs to be a subset of the addressPrefix - default is 10.6.0.0/16"
+				"description": "CIDR used for the acceptance node subnet - needs to be a subset of the addressPrefix - default is 10.6.0.0/16"
 			}
 		},
 		"masterClusterType": {
@@ -593,32 +606,32 @@
 				"description": "Subscription ID for core infrastructure components"
 			}
 		},
-		"developmentNodeGroupResourceGroup": {
+		"acceptanceNodeGroupResourceGroup": {
 			"type": "string",
 			"defaultValue": "none",
 			"metadata": {
-				"description": "Resource group for development node group components"
+				"description": "Resource group for acceptance node group components"
 			}
 		},
-		"developmentNodeGroupSubscriptionID": {
+		"acceptanceNodeGroupSubscriptionID": {
 			"type": "string",
 			"defaultValue": "none",
 			"metadata": {
-				"description": "Subscription ID for development node group components"
+				"description": "Subscription ID for acceptance node group components"
 			}
 		},
-		"testNodeGroupResourceGroup": {
+		"productionNodeGroupResourceGroup": {
 			"type": "string",
 			"defaultValue": "none",
 			"metadata": {
-				"description": "Resource group for test node group components"
+				"description": "Resource group for production node group components"
 			}
 		},
-		"testNodeGroupSubscriptionID": {
+		"productionNodeGroupSubscriptionID": {
 			"type": "string",
 			"defaultValue": "none",
 			"metadata": {
-				"description": "Subscription ID for test node group components"
+				"description": "Subscription ID for production node group components"
 			}
 		},
 		"toolsNodeGroupResourceGroup": {
@@ -654,14 +667,14 @@
 		"openshiftInfraHostname": "[concat(variables('simplifiedClusterPrefix'), 'plosci')]",
 		"openshiftCnsHostname": "[concat(variables('simplifiedClusterPrefix'), 'ploscc')]",
 		"openshiftToolsNodeHostname": "[concat(variables('simplifiedClusterPrefix'), 'plosca')]",
-		"openshiftTestNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'plosca')]",
-		"openshiftDevelopmentNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'alosca')]",
+		"openshiftProductionNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'plosca')]",
+		"openshiftAcceptanceNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'alosca')]",
 		"diagStorageAccountM": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscm01')]",
 		"diagStorageAccountI": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosci01')]",
 		"diagStorageAccountC": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscc01')]",
 		"diagStorageAccountT": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscp01')]",
 		"diagStorageAccountP": "[concat(variables('simplifiedClusterPrefix2'), 'prdsaosca01')]",
-		"diagStorageAccountA": "[concat(variables('simplifiedClusterPrefix2'), 'devsaosca01')]",
+		"diagStorageAccountA": "[concat(variables('simplifiedClusterPrefix2'), 'accsaosca01')]",
 		"newStorageAccountRegistry": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosccr01')]",
 		"coreInfraDiagStorageAccountArray": [
 			{ "name": "[variables('diagStorageAccountM')]"},
@@ -675,8 +688,8 @@
 		],
 		"nodeGroupAvailabilitySetArray": [
 			{ "name": "[concat(parameters('openshiftClusterPrefix'), '-Prd-As-Osca-01')]", "tagName": "ToolNodeGroupAvailabilitySet" },
-			{ "name": "[concat(parameters('openshiftClusterPrefix2'), '-Prd-As-Osca-01')]", "tagName": "TestNodeGroupAvailabilitySet" },
-			{ "name": "[concat(parameters('openshiftClusterPrefix2'), '-Acc-As-Osca-01')]", "tagName": "DevelopmentNodeGroupAvailabilitySet" }
+			{ "name": "[concat(parameters('openshiftClusterPrefix2'), '-Prd-As-Osca-01')]", "tagName": "ProductionNodeGroupAvailabilitySet" },
+			{ "name": "[concat(parameters('openshiftClusterPrefix2'), '-Acc-As-Osca-01')]", "tagName": "AcceptanceNodeGroupAvailabilitySet" }
 		],
 		"bastionIp": "[concat(variables('masterFirstAddrPrefix'), add(int(variables('masterFirstAddrOctets4split')[0]),14))]",
 		"masterFirstAddrOctets": "[split(parameters('masterSubnetPrefix'),'.')]",
@@ -695,14 +708,14 @@
 		"toolsFirstAddrOctets4split": "[split(variables('toolsFirstAddrOctets')[3],'/')]",
 		"toolsFirstAddrOctet4": "[add(int(variables('toolsFirstAddrOctets4split')[0]),4)]",
 		"toolsFirstAddrPrefix": "[concat(variables('toolsFirstAddrOctets')[0], '.', variables('toolsFirstAddrOctets')[1], '.', variables('toolsFirstAddrOctets')[2], '.')]",
-		"testFirstAddrOctets": "[split(parameters('testSubnetPrefix'),'.')]",
-		"testFirstAddrOctets4split": "[split(variables('testFirstAddrOctets')[3],'/')]",
-		"testFirstAddrOctet4": "[add(int(variables('testFirstAddrOctets4split')[0]),4)]",
-		"testFirstAddrPrefix": "[concat(variables('testFirstAddrOctets')[0], '.', variables('testFirstAddrOctets')[1], '.', variables('testFirstAddrOctets')[2], '.')]",
-		"devFirstAddrOctets": "[split(parameters('devSubnetPrefix'),'.')]",
-		"devFirstAddrOctets4split": "[split(variables('devFirstAddrOctets')[3],'/')]",
-		"devFirstAddrOctet4": "[add(int(variables('devFirstAddrOctets4split')[0]),4)]",
-		"devFirstAddrPrefix": "[concat(variables('devFirstAddrOctets')[0], '.', variables('devFirstAddrOctets')[1], '.', variables('devFirstAddrOctets')[2], '.')]",
+		"prodFirstAddrOctets": "[split(parameters('prodSubnetPrefix'),'.')]",
+		"prodFirstAddrOctets4split": "[split(variables('prodFirstAddrOctets')[3],'/')]",
+		"prodFirstAddrOctet4": "[add(int(variables('prodFirstAddrOctets4split')[0]),4)]",
+		"prodFirstAddrPrefix": "[concat(variables('prodFirstAddrOctets')[0], '.', variables('prodFirstAddrOctets')[1], '.', variables('prodFirstAddrOctets')[2], '.')]",
+		"accFirstAddrOctets": "[split(parameters('accSubnetPrefix'),'.')]",
+		"accFirstAddrOctets4split": "[split(variables('accFirstAddrOctets')[3],'/')]",
+		"accFirstAddrOctet4": "[add(int(variables('accFirstAddrOctets4split')[0]),4)]",
+		"accFirstAddrPrefix": "[concat(variables('accFirstAddrOctets')[0], '.', variables('accFirstAddrOctets')[1], '.', variables('accFirstAddrOctets')[2], '.')]",
 		"bastionPublicIp": "bastionpublicip",
 		"bastionPublicIpDnsLabel": "[concat('bastiondns', uniqueString(resourceGroup().id))]",
 		"infraLbPublicIpDnsLabel": "[concat('infradns', uniqueString(concat(resourceGroup().id, 'infra')))]",
@@ -763,6 +776,7 @@
 			"name": "[parameters('marketplaceOsImage').sku]"
 		},
 		"bastionVmSize": "Standard_D2s_v3",
+		"glusterDiskSize": 256,
 		"singlequote": "'",
 		"sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
 		"bastionPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/bastionPrep.sh')]",
@@ -1351,7 +1365,7 @@
 						"value": "[parameters('cnsInstanceCount')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
@@ -1429,15 +1443,15 @@
 						"value": "[parameters('toolsNodeInstanceCount')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
 		}, {
-			"name": "TestNodeGroupDeployment",
+			"name": "ProductionNodeGroupDeployment",
 			"type": "Microsoft.Resources/deployments",
-			"resourceGroup": "[parameters('testNodeGroupResourceGroup')]",
-            "subscriptionId": "[parameters('testNodeGroupSubscriptionID')]",
+			"resourceGroup": "[parameters('productionNodeGroupResourceGroup')]",
+            "subscriptionId": "[parameters('productionNodeGroupSubscriptionID')]",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
 			],
@@ -1476,45 +1490,45 @@
 						"value": "[variables('simplifiedClusterPrefix2')]"
 					},
 					"openshiftNodeHostname": {
-						"value": "[variables('openshiftTestNodeHostname')]"
+						"value": "[variables('openshiftProductionNodeHostname')]"
 					},
 					"availabilitySetName": {
 						"value": "[variables('nodeGroupAvailabilitySetArray')[1].name]"
 					},
 					"virtualNetworkResourceGroupName": {
-						"value": "[parameters('testVirtualNetworkResourceGroup')]"
+						"value": "[parameters('prodVirtualNetworkResourceGroup')]"
 					},
 					"existingVnetName": {
-						"value": "[parameters('testVirtualNetworkName')]"
+						"value": "[parameters('prodVirtualNetworkName')]"
 					},
 					"subnetName": {
-						"value": "[parameters('testSubnetName')]"
+						"value": "[parameters('prodSubnetName')]"
 					},
 					"subnetPrefix": {
-						"value": "[parameters('testSubnetPrefix')]"
+						"value": "[parameters('prodSubnetPrefix')]"
 					},
 					"nodeFirstAddrOctet4": {
-						"value": "[variables('testFirstAddrOctet4')]"
+						"value": "[variables('prodFirstAddrOctet4')]"
 					},
 					"nodeFirstAddrPrefix": {
-						"value": "[variables('testFirstAddrPrefix')]"
+						"value": "[variables('prodFirstAddrPrefix')]"
 					},
 					"enableNodeAcceleratedNetworking": {
 						"value": "[if(equals(variables('vmSizesMap')[parameters('nodeVmSize')].acceleratedNetworking, 'true'), 'true', 'false')]"
 					},
 					"nodeInstanceCount": {
-						"value": "[parameters('testNodeInstanceCount')]"
+						"value": "[parameters('productionNodeInstanceCount')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
 		}, {
-			"name": "DevelopmentNodeGroupDeployment",
+			"name": "AcceptanceNodeGroupDeployment",
 			"type": "Microsoft.Resources/deployments",
-			"resourceGroup": "[parameters('developmentNodeGroupResourceGroup')]",
-            "subscriptionId": "[parameters('developmentNodeGroupSubscriptionID')]",
+			"resourceGroup": "[parameters('acceptanceNodeGroupResourceGroup')]",
+            "subscriptionId": "[parameters('acceptanceNodeGroupSubscriptionID')]",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
 			],
@@ -1553,37 +1567,37 @@
 						"value": "[variables('simplifiedClusterPrefix2')]"
 					},
 					"openshiftNodeHostname": {
-						"value": "[variables('openshiftDevelopmentNodeHostname')]"
+						"value": "[variables('openshiftAcceptanceNodeHostname')]"
 					},
 					"availabilitySetName": {
 						"value": "[variables('nodeGroupAvailabilitySetArray')[2].name]"
 					},
 					"virtualNetworkResourceGroupName": {
-						"value": "[parameters('devVirtualNetworkResourceGroup')]"
+						"value": "[parameters('accVirtualNetworkResourceGroup')]"
 					},
 					"existingVnetName": {
-						"value": "[parameters('devVirtualNetworkName')]"
+						"value": "[parameters('accVirtualNetworkName')]"
 					},
 					"subnetName": {
-						"value": "[parameters('devSubnetName')]"
+						"value": "[parameters('accSubnetName')]"
 					},
 					"subnetPrefix": {
-						"value": "[parameters('devSubnetPrefix')]"
+						"value": "[parameters('accSubnetPrefix')]"
 					},
 					"nodeFirstAddrOctet4": {
-						"value": "[variables('devFirstAddrOctet4')]"
+						"value": "[variables('accFirstAddrOctet4')]"
 					},
 					"nodeFirstAddrPrefix": {
-						"value": "[variables('devFirstAddrPrefix')]"
+						"value": "[variables('accFirstAddrPrefix')]"
 					},
 					"enableNodeAcceleratedNetworking": {
 						"value": "[if(equals(variables('vmSizesMap')[parameters('nodeVmSize')].acceleratedNetworking, 'true'), 'true', 'false')]"
 					},
 					"nodeInstanceCount": {
-						"value": "[parameters('developmentNodeInstanceCount')]"
+						"value": "[parameters('acceptanceNodeInstanceCount')]"
 					},
 					"customTags": {
-						"value": "[parameters('developmentCustomTags')]"
+						"value": "[parameters('acceptanceCustomTags')]"
 					}
 				}
 			}
@@ -1652,7 +1666,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
@@ -1731,7 +1745,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
@@ -1810,7 +1824,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
@@ -1847,7 +1861,7 @@
 						"value": "[parameters('dataDiskSize')]"
 					},
 					"glusterDiskSize": {
-						"value": "[parameters('glusterDiskSize')]"
+						"value": "[variables('glusterDiskSize')]"
 					},
 					"adminUsername": {
 						"value": "[parameters('adminUsername')]"
@@ -1892,7 +1906,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
@@ -1971,22 +1985,22 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
 		}, {
-			"name": "[concat('testNodeGroupVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('productionNodeGroupVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]",
 			"type": "Microsoft.Resources/deployments",
-			"resourceGroup": "[parameters('testNodeGroupResourceGroup')]",
-            "subscriptionId": "[parameters('testNodeGroupSubscriptionID')]",
+			"resourceGroup": "[parameters('productionNodeGroupResourceGroup')]",
+            "subscriptionId": "[parameters('productionNodeGroupSubscriptionID')]",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"TestNodeGroupDeployment"
+				"ProductionNodeGroupDeployment"
 			],
 			"copy": {
-				"name": "testNodeGroupVmLoop",
-				"count": "[parameters('testNodeInstanceCount')]"
+				"name": "productionNodeGroupVmLoop",
+				"count": "[parameters('productionNodeInstanceCount')]"
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -2026,10 +2040,10 @@
 						"value": "[variables('nodeGroupAvailabilitySetArray')[1].name]"
 					},
 					"hostName": {
-						"value": "[concat(variables('openshiftTestNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftProductionNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
 					},
 					"networkInterfaceName": {
-						"value": "[concat(variables('openshiftTestNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'), '-nic-01')]"
+						"value": "[concat(variables('openshiftProductionNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'), '-nic-01')]"
 					},
 					"vmStorageType": {
 						"value": "[variables('vmSizesMap')[parameters('nodeVmSize')].storageAccountType]"
@@ -2038,7 +2052,7 @@
 						"value": "[parameters('storageKind')]"
 					},
 					"diagStorageAccountUri": {
-						"value": "[reference('TestNodeGroupDeployment').outputs.storageUri.value]"
+						"value": "[reference('ProductionNodeGroupDeployment').outputs.storageUri.value]"
 					},
 					"apiVersionStorage": {
 						"value": "[variables('apiVersionStorage')]"
@@ -2050,22 +2064,22 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
 		}, {
-			"name": "[concat('developmentNodeGroupVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('acceptanceNodeGroupVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]",
 			"type": "Microsoft.Resources/deployments",
-			"resourceGroup": "[parameters('developmentNodeGroupResourceGroup')]",
-            "subscriptionId": "[parameters('developmentNodeGroupSubscriptionID')]",
+			"resourceGroup": "[parameters('acceptanceNodeGroupResourceGroup')]",
+            "subscriptionId": "[parameters('acceptanceNodeGroupSubscriptionID')]",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"DevelopmentNodeGroupDeployment"
+				"AcceptanceNodeGroupDeployment"
 			],
 			"copy": {
-				"name": "developmentNodeGroupVmLoop",
-				"count": "[parameters('developmentNodeInstanceCount')]"
+				"name": "acceptanceNodeGroupVmLoop",
+				"count": "[parameters('acceptanceNodeInstanceCount')]"
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -2105,10 +2119,10 @@
 						"value": "[variables('nodeGroupAvailabilitySetArray')[2].name]"
 					},
 					"hostName": {
-						"value": "[concat(variables('openshiftDevelopmentNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftAcceptanceNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
 					},
 					"networkInterfaceName": {
-						"value": "[concat(variables('openshiftDevelopmentNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'), '-nic-01')]"
+						"value": "[concat(variables('openshiftAcceptanceNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'), '-nic-01')]"
 					},
 					"vmStorageType": {
 						"value": "[variables('vmSizesMap')[parameters('nodeVmSize')].storageAccountType]"
@@ -2117,7 +2131,7 @@
 						"value": "[parameters('storageKind')]"
 					},
 					"diagStorageAccountUri": {
-						"value": "[reference('DevelopmentNodeGroupDeployment').outputs.storageUri.value]"
+						"value": "[reference('AcceptanceNodeGroupDeployment').outputs.storageUri.value]"
 					},
 					"apiVersionStorage": {
 						"value": "[variables('apiVersionStorage')]"
@@ -2129,7 +2143,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('developmentCustomTags')]"
+						"value": "[parameters('acceptanceCustomTags')]"
 					}
 				}
 			}
@@ -2174,12 +2188,7 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "activationKey"
-						}
+						"value": "[parameters('rhsmPasswordOrActivationKey')]"
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmBrokerPoolId')]"
@@ -2187,9 +2196,9 @@
 					"sshPrivateKey": {
 						"reference": {
 							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "sshPrivateKey"
+							"secretName": "[parameters('keyVaultSecret')]"
 						}
 					},
 					"routingCertType": {
@@ -2201,53 +2210,53 @@
 					"customRoutingCaFile": {
 						"reference": {
 							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcafile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcafile', parameters('keyVaultSecret'))]"
 						}
 					},
 					"customRoutingCertFile": {
 						"reference": {
 							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcertfile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcertfile', parameters('keyVaultSecret'))]"
 						}
 					},
 					"customRoutingKeyFile": {
 						"reference": {
 							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingkeyfile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingkeyfile', parameters('keyVaultSecret'))]"
 						}
 					},
 					"customMasterCaFile": {
 						"reference": {
 							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercafile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercafile', parameters('keyVaultSecret'))]"
 						}
 					},
 					"customMasterCertFile": {
 						"reference": {
 							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercertfile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercertfile', parameters('keyVaultSecret'))]"
 						}
 					},
 					"customMasterKeyFile": {
 						"reference": {
 							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'masterkeyfile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'masterkeyfile', parameters('keyVaultSecret'))]"
 						}
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
@@ -2293,18 +2302,13 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "activationKey"
-						}
+						"value": "[parameters('rhsmPasswordOrActivationKey')]"
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmBrokerPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
@@ -2347,18 +2351,13 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "activationKey"
-						}
+						"value": "[parameters('rhsmPasswordOrActivationKey')]"
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmBrokerPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
@@ -2401,18 +2400,13 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "activationKey"
-						}
+						"value": "[parameters('rhsmPasswordOrActivationKey')]"
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
@@ -2455,33 +2449,28 @@
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "activationKey"
-						}
+						"value": "[parameters('rhsmPasswordOrActivationKey')]"
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
 		}, {
-			"name": "[concat('TestNodeGroupPrep', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('ProductionNodeGroupPrep', padLeft(add(copyIndex(), 1), 2, '0'))]",
 			"type": "Microsoft.Resources/deployments",
-			"resourceGroup": "[parameters('testNodeGroupResourceGroup')]",
-            "subscriptionId": "[parameters('testNodeGroupSubscriptionID')]",
+			"resourceGroup": "[parameters('productionNodeGroupResourceGroup')]",
+            "subscriptionId": "[parameters('productionNodeGroupSubscriptionID')]",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[concat('testNodeGroupVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]"
+				"[concat('productionNodeGroupVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]"
 			],
 			"copy": {
-				"name": "testNodeGroupPrepLoop",
-				"count": "[parameters('testNodeInstanceCount')]"
+				"name": "productionNodeGroupPrepLoop",
+				"count": "[parameters('productionNodeInstanceCount')]"
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -2503,39 +2492,34 @@
 						"value": "[variables('nodePrepScriptFileName')]"
 					},
 					"openshiftNodeHostname": {
-						"value": "[concat(variables('openshiftTestNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftProductionNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
 					},
 					"rhsmUsernameOrOrgId": {
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "activationKey"
-						}
+						"value": "[parameters('rhsmPasswordOrActivationKey')]"
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					}
 				}
 			}
 		}, {
-			"name": "[concat('DevelopmentNodeGroupPrep', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('AcceptanceNodeGroupPrep', padLeft(add(copyIndex(), 1), 2, '0'))]",
 			"type": "Microsoft.Resources/deployments",
-			"resourceGroup": "[parameters('developmentNodeGroupResourceGroup')]",
-            "subscriptionId": "[parameters('developmentNodeGroupSubscriptionID')]",
+			"resourceGroup": "[parameters('acceptanceNodeGroupResourceGroup')]",
+            "subscriptionId": "[parameters('acceptanceNodeGroupSubscriptionID')]",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[concat('developmentNodeGroupVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]"
+				"[concat('acceptanceNodeGroupVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]"
 			],
 			"copy": {
-				"name": "developmentNodeGroupPrepLoop",
-				"count": "[parameters('developmentNodeInstanceCount')]"
+				"name": "acceptanceNodeGroupPrepLoop",
+				"count": "[parameters('acceptanceNodeInstanceCount')]"
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -2557,24 +2541,19 @@
 						"value": "[variables('nodePrepScriptFileName')]"
 					},
 					"openshiftNodeHostname": {
-						"value": "[concat(variables('openshiftDevelopmentNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftAcceptanceNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
 					},
 					"rhsmUsernameOrOrgId": {
 						"value": "[parameters('rhsmUsernameOrOrgId')]"
 					},
 					"rhsmPasswordOrActivationKey": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "activationKey"
-						}
+						"value": "[parameters('rhsmPasswordOrActivationKey')]"
 					},
 					"rhsmPoolId": {
 						"value": "[parameters('rhsmPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('developmentCustomTags')]"
+						"value": "[parameters('acceptanceCustomTags')]"
 					}
 				}
 			}
@@ -2591,8 +2570,8 @@
 				"infraPrepLoop",
 				"cnsPrepLoop",
 				"toolsNodeGroupPrepLoop",
-				"testNodeGroupPrepLoop",
-				"developmentNodeGroupPrepLoop"
+				"productionNodeGroupPrepLoop",
+				"acceptanceNodeGroupPrepLoop"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -2649,11 +2628,11 @@
 					"openshiftToolsNodeHostname": {
 						"value": "[variables('openshiftToolsNodeHostname')]"
 					},
-					"openshiftTestNodeHostname": {
-						"value": "[variables('openshiftTestNodeHostname')]"
+					"openshiftProductionNodeHostname": {
+						"value": "[variables('openshiftProductionNodeHostname')]"
 					},
-					"openshiftDevelopmentNodeHostname": {
-						"value": "[variables('openshiftDevelopmentNodeHostname')]"
+					"openshiftAcceptanceNodeHostname": {
+						"value": "[variables('openshiftAcceptanceNodeHostname')]"
 					},
 					"masterInstanceCount": {
 						"value": "[parameters('masterInstanceCount')]"
@@ -2667,11 +2646,11 @@
 					"toolsNodeInstanceCount": {
 						"value": "[parameters('toolsNodeInstanceCount')]"
 					},
-					"testNodeInstanceCount": {
-						"value": "[parameters('testNodeInstanceCount')]"
+					"productionNodeInstanceCount": {
+						"value": "[parameters('productionNodeInstanceCount')]"
 					},
-					"developmentNodeInstanceCount": {
-						"value": "[parameters('developmentNodeInstanceCount')]"
+					"acceptanceNodeInstanceCount": {
+						"value": "[parameters('acceptanceNodeInstanceCount')]"
 					},
 					"storageKind": {
 						"value": "[parameters('storageKind')]"
@@ -2680,12 +2659,7 @@
 						"value": "[parameters('adminUsername')]"
 					},
 					"openshiftPassword": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "openshiftPassword"
-						}
+						"value": "[parameters('openshiftPassword')]"
 					},
 					"enableCNS": {
 						"value": "[parameters('enableCNS')]"
@@ -2703,12 +2677,7 @@
 						"value": "[parameters('aadClientId')]"
 					},
 					"aadClientSecret": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "aadClientSecret"
-						}
+						"value": "[parameters('aadClientSecret')]"
 					},
 					"domainName": {
 						"value": "[parameters('domainName')]"
@@ -2723,7 +2692,7 @@
 						"value": "[concat(parameters('routingSubDomainType'), 'Domain')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('productionCustomTags')]"
 					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"

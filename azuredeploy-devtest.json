@@ -654,14 +654,14 @@
 		"openshiftInfraHostname": "[concat(variables('simplifiedClusterPrefix'), 'plosci')]",
 		"openshiftCnsHostname": "[concat(variables('simplifiedClusterPrefix'), 'ploscc')]",
 		"openshiftToolsNodeHostname": "[concat(variables('simplifiedClusterPrefix'), 'plosca')]",
-		"openshiftTestNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'plosca')]",
-		"openshiftDevelopmentNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'alosca')]",
-		"diagStorageAccountM": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscm01')]",
-		"diagStorageAccountI": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosci01')]",
-		"diagStorageAccountC": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscc01')]",
+		"openshiftTestNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'tlosca')]",
+		"openshiftDevelopmentNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'dlosca')]",
+		"diagStorageAccountM": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscm11')]",
+		"diagStorageAccountI": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosci11')]",
+		"diagStorageAccountC": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscc11')]",
 		"diagStorageAccountT": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscp01')]",
-		"diagStorageAccountP": "[concat(variables('simplifiedClusterPrefix2'), 'prdsaosca01')]",
-		"diagStorageAccountA": "[concat(variables('simplifiedClusterPrefix2'), 'devsaosca01')]",
+		"diagStorageAccountTst": "[concat(variables('simplifiedClusterPrefix2'), 'tstsaosca01')]",
+		"diagStorageAccountD": "[concat(variables('simplifiedClusterPrefix2'), 'devsaosca01')]",
 		"newStorageAccountRegistry": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosccr01')]",
 		"coreInfraDiagStorageAccountArray": [
 			{ "name": "[variables('diagStorageAccountM')]"},
@@ -1467,7 +1467,7 @@
 						"value": "[variables('subnetCreateTemplateUrl')]"
 					},
 					"diagStorageAccount": {
-						"value": "[variables('diagStorageAccountP')]"
+						"value": "[variables('diagStorageAccountTst')]"
 					},
 					"openshiftClusterPrefix": {
 						"value": "[concat(parameters('openshiftClusterPrefix2'), '-Prd')]"
@@ -1544,7 +1544,7 @@
 						"value": "[variables('subnetCreateTemplateUrl')]"
 					},
 					"diagStorageAccount": {
-						"value": "[variables('diagStorageAccountA')]"
+						"value": "[variables('diagStorageAccountD')]"
 					},
 					"openshiftClusterPrefix": {
 						"value": "[concat(parameters('openshiftClusterPrefix2'), '-Acc')]"
@@ -1657,7 +1657,7 @@
 				}
 			}
 		}, {
-			"name": "[concat('masterVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('masterVmDeployment', padLeft(add(copyIndex(), 1), 2, '1'))]",
 			"type": "Microsoft.Resources/deployments",
 			"resourceGroup": "[parameters('coreinfrastructureResourceGroup')]",
             "subscriptionId": "[parameters('coreinfrastructureSubscriptionID')]",
@@ -1707,10 +1707,10 @@
 						"value": "[variables('availabilitySetArray')[0].name]"
 					},
 					"hostName": {
-						"value": "[concat(variables('openshiftMasterHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftMasterHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"
 					},
 					"networkInterfaceName": {
-						"value": "[concat(variables('openshiftMasterHostname'), padLeft(add(copyIndex(), 1), 2, '0'), '-nic-01')]"
+						"value": "[concat(variables('openshiftMasterHostname'), padLeft(add(copyIndex(), 1), 2, '1'), '-nic-01')]"
 					},
 					"vmStorageType": {
 						"value": "[variables('vmSizesMap')[parameters('masterVmSize')].storageAccountType]"
@@ -1736,7 +1736,7 @@
 				}
 			}
 		}, {
-			"name": "[concat('infraVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('infraVmDeployment', padLeft(add(copyIndex(), 1), 2, '1'))]",
 			"type": "Microsoft.Resources/deployments",
 			"resourceGroup": "[parameters('coreinfrastructureResourceGroup')]",
             "subscriptionId": "[parameters('coreinfrastructureSubscriptionID')]",
@@ -1786,10 +1786,10 @@
 						"value": "[variables('availabilitySetArray')[1].name]"
 					},
 					"hostName": {
-						"value": "[concat(variables('openshiftInfraHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftInfraHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"
 					},
 					"networkInterfaceName": {
-						"value": "[concat(variables('openshiftInfraHostname'), padLeft(add(copyIndex(), 1), 2, '0'), '-nic-01')]"
+						"value": "[concat(variables('openshiftInfraHostname'), padLeft(add(copyIndex(), 1), 2, '1'), '-nic-01')]"
 					},
 					"vmStorageType": {
 						"value": "[variables('vmSizesMap')[parameters('infraVmSize')].storageAccountType]"
@@ -1815,7 +1815,7 @@
 				}
 			}
 		}, {
-			"name": "[concat('cnsVmDeployment', padLeft(add(copyIndex(), 1), 2, '0'))]",
+			"name": "[concat('cnsVmDeployment', padLeft(add(copyIndex(), 1), 2, '1'))]",
 			"type": "Microsoft.Resources/deployments",
 			"resourceGroup": "[parameters('coreinfrastructureResourceGroup')]",
             "subscriptionId": "[parameters('coreinfrastructureSubscriptionID')]",
@@ -1868,10 +1868,10 @@
 						"value": "[variables('availabilitySetArray')[2].name]"
 					},
 					"hostName": {
-						"value": "[concat(variables('openshiftCnsHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
+						"value": "[concat(variables('openshiftCnsHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"
 					},
 					"networkInterfaceName": {
-						"value": "[concat(variables('openshiftCnsHostname'), padLeft(add(copyIndex(), 1), 2, '0'), '-nic-01')]"
+						"value": "[concat(variables('openshiftCnsHostname'), padLeft(add(copyIndex(), 1), 2, '1'), '-nic-01')]"
 					},
 					"vmStorageType": {
 						"value": "[variables('vmSizesMap')[parameters('cnsVmSize')].storageAccountType]"

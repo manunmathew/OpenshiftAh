@@ -1352,10 +1352,10 @@
 					},
 					"nameSuffix": {
 						"value": "01"
-					}
+					},
 					"hostSuffix": {
 						"value": "0"
-					}
+					},
 					"customTags": {
 						"value": "[parameters('productionCustomTags')]"
 					}
@@ -2673,11 +2673,11 @@
 					"openshiftToolsNodeHostname": {
 						"value": "[variables('openshiftToolsNodeHostname')]"
 					},
-					"openshiftProductionNodeHostname": {
-						"value": "[variables('openshiftProductionNodeHostname')]"
+					"openshiftProdTestNodeHostname": {
+						"value": "[variables('openshiftTestNodeHostname')]"
 					},
-					"openshiftAcceptanceNodeHostname": {
-						"value": "[variables('openshiftAcceptanceNodeHostname')]"
+					"openshiftAccDevNodeHostname": {
+						"value": "[variables('openshiftDevelopmentNodeHostname')]"
 					},
 					"masterInstanceCount": {
 						"value": "[parameters('masterInstanceCount')]"
@@ -2691,11 +2691,11 @@
 					"toolsNodeInstanceCount": {
 						"value": "[parameters('toolsNodeInstanceCount')]"
 					},
-					"productionNodeInstanceCount": {
-						"value": "[parameters('productionNodeInstanceCount')]"
+					"prodtestNodeInstanceCount": {
+						"value": "[parameters('testNodeInstanceCount')]"
 					},
-					"acceptanceNodeInstanceCount": {
-						"value": "[parameters('acceptanceNodeInstanceCount')]"
+					"accdevNodeInstanceCount": {
+						"value": "[parameters('developmentNodeInstanceCount')]"
 					},
 					"storageKind": {
 						"value": "[parameters('storageKind')]"
@@ -2748,6 +2748,9 @@
 					},
 					"customTags": {
 						"value": "[parameters('productionCustomTags')]"
+					},
+					"hostSuffix": {
+						"value": "0"
 					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"

@@ -2673,10 +2673,10 @@
 					"openshiftToolsNodeHostname": {
 						"value": "[variables('openshiftToolsNodeHostname')]"
 					},
-					"openshiftTestNodeHostname": {
+					"openshiftProdTestNodeHostname": {
 						"value": "[variables('openshiftTestNodeHostname')]"
 					},
-					"openshiftDevelopmentNodeHostname": {
+					"openshiftAccDevNodeHostname": {
 						"value": "[variables('openshiftDevelopmentNodeHostname')]"
 					},
 					"masterInstanceCount": {
@@ -2691,10 +2691,10 @@
 					"toolsNodeInstanceCount": {
 						"value": "[parameters('toolsNodeInstanceCount')]"
 					},
-					"testNodeInstanceCount": {
+					"prodtestNodeInstanceCount": {
 						"value": "[parameters('testNodeInstanceCount')]"
 					},
-					"developmentNodeInstanceCount": {
+					"accdevNodeInstanceCount": {
 						"value": "[parameters('developmentNodeInstanceCount')]"
 					},
 					"storageKind": {
@@ -2748,6 +2748,9 @@
 					},
 					"customTags": {
 						"value": "[parameters('testCustomTags')]"
+					},
+					"hostSuffix": {
+						"value": "1"
 					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"

@@ -40,9 +40,10 @@ export PRODUCTION=${33}
 export ACCEPTANCE=${34}
 export CUSTOMROUTINGCERTTYPE=${35}
 export CUSTOMMASTERCERTTYPE=${36}
-export PRODUCTIONCOUNT="${37}"
-export ACCEPTANCECOUNT="${38}"
+export PRODTESTCOUNT="${37}"
+export ACCDEVCOUNT="${38}"
 export DOMAIN="${39}"
+export HOSTSUFFIX=${40}
 
 export BASTION=$(hostname)
 
@@ -148,55 +149,21 @@ fi
 
 # Create Master nodes grouping
 echo $(date) " - Creating Master nodes grouping"
-if [ $MASTERCOUNT -gt 9 ]
-then
-	MASTERLIST=$MASTERCOUNT
-	# If more than 10 master nodes need to create groups 01 - 09 separately than 10 and higher
-	for (( c=1; c<=9; c++ ))
-	do
-    mastergroup="$mastergroup
-${MASTER}0$c openshift_hostname=${MASTER}0$c openshift_node_group_name='node-config-master'"
-	done
+MASTERLIST="${HOSTSUFFIX}$MASTERCOUNT"
 
-	for (( c=10; c<=$MASTERCOUNT; c++ ))
-	do
-    mastergroup="$mastergroup
-$MASTER$c openshift_hostname=$MASTER$c openshift_node_group_name='node-config-master'"
-	done
-else
-	MASTERLIST="0$MASTERCOUNT"
-	# If less than 10 master nodes
-	for (( c=1; c<=$MASTERCOUNT; c++ ))
-	do
-    mastergroup="$mastergroup
-${MASTER}0$c openshift_hostname=${MASTER}0$c openshift_node_group_name='node-config-master'"
-	done
-fi
+for (( c=1; c<=$MASTERCOUNT; c++ ))
+do
+	mastergroup="$mastergroup
+${MASTER}${HOSTSUFFIX}$c openshift_hostname=${MASTER}${HOSTSUFFIX}$c openshift_node_group_name='node-config-master'"
+done
 
 # Create Infra nodes grouping 
 echo $(date) " - Creating Infra nodes grouping"
-if [ $INFRACOUNT -gt 9 ]
-then
-	# If more than 10 infra nodes need to create groups 01 - 09 separately than 10 and higher
-	for (( c=1; c<=$9; c++ ))
-	do
-    infragroup="$infragroup
-${INFRA}0$c openshift_hostname=${INFRA}0$c openshift_node_group_name='node-config-infra'"
-	done
-
-	for (( c=10; c=<$INFRACOUNT; c++ ))
-	do
-    infragroup="$infragroup
-$INFRA$c openshift_hostname=$INFRA$c openshift_node_group_name='node-config-infra'"
-	done
-else
-	# If less than 10 infra nodes
-	for (( c=1; c<=$INFRACOUNT; c++ ))
-	do
-    infragroup="$infragroup
-${INFRA}0$c openshift_hostname=${INFRA}0$c openshift_node_group_name='node-config-infra'"
-	done
-fi
+for (( c=1; c<=$INFRACOUNT; c++ ))
+do
+	infragroup="$infragroup
+${INFRA}${HOSTSUFFIX}$c openshift_hostname=${INFRA}${HOSTSUFFIX}$c openshift_node_group_name='node-config-infra'"
+done
 
 # Create Tools node grouping
 echo $(date) " - Creating Nodes grouping"
@@ -223,78 +190,62 @@ ${TOOLS}0$c openshift_hostname=${TOOLS}0$c openshift_node_group_name='node-confi
 	done
 fi
 
-# Create Production node grouping
+# Create Production / Test node grouping
 echo $(date) " - Creating Nodes grouping"
-if [ $PRODUCTIONCOUNT -gt 9 ]
+if [ $PRODTESTCOUNT -gt 9 ]
 then
 	# If more than 10 production nodes need to create groups 01 - 09 separately than 10 and higher
 	for (( c=1; c<=9; c++ ))
 	do
-    productionnodegroup="$productionnodegroup
+    prodtestnodegroup="$prodtestnodegroup
 ${PRODUCTION}0$c openshift_hostname=${PRODUCTION}0$c openshift_node_group_name='node-config-compute-production'"
 	done
 
-	for (( c=10; c<=$PRODUCTIONCOUNT; c++ ))
+	for (( c=10; c<=$PRODTESTCOUNT; c++ ))
 	do
-    productionnodegroup="$productionnodegroup
+    prodtestnodegroup="$prodtestnodegroup
 $PRODUCTION$c openshift_hostname=$PRODUCTION$c openshift_node_group_name='node-config-compute-production'"
 	done
 else
 	# If less than 10 tools nodes
-	for (( c=1; c<=$PRODUCTIONCOUNT; c++ ))
+	for (( c=1; c<=$PRODTESTCOUNT; c++ ))
 	do
-    productionnodegroup="$productionnodegroup
+    prodtestnodegroup="$prodtestnodegroup
 ${PRODUCTION}0$c openshift_hostname=${PRODUCTION}0$c openshift_node_group_name='node-config-compute-production'"
 	done
 fi
 
-# Create Acceptance node grouping
+# Create Acceptance / Development node grouping
 echo $(date) " - Creating Nodes grouping"
-if [ $ACCEPTANCECOUNT -gt 9 ]
+if [ $ACCDEVCOUNT -gt 9 ]
 then
 	# If more than 10 acceptance nodes need to create groups 01 - 09 separately than 10 and higher
 	for (( c=1; c<=9; c++ ))
 	do
-		acceptancenodegroup="$acceptancenodegroup
+		accdevnodegroup="$accdevnodegroup
 ${ACCEPTANCE}0$c openshift_hostname=${ACCEPTANCE}0$c openshift_node_group_name='node-config-compute-acceptance'"
 	done
 	
-	for (( c=10; c<=$ACCEPTANCECOUNT; c++ ))
+	for (( c=10; c<=$ACCDEVCOUNT; c++ ))
 	do
-		acceptancenodegroup="$acceptancenodegroup
+		accdevnodegroup="$accdevnodegroup
 $ACCEPTANCE$c openshift_hostname=$ACCEPTANCE$c openshift_node_group_name='node-config-compute-acceptance'"
 	done
 else
-	for (( c=1; c<=$ACCEPTANCECOUNT; c++ ))
+	for (( c=1; c<=$ACCDEVCOUNT; c++ ))
 	do
-		acceptancenodegroup="$acceptancenodegroup
+		accdevnodegroup="$accdevnodegroup
 ${ACCEPTANCE}0$c openshift_hostname=${ACCEPTANCE}0$c openshift_node_group_name='node-config-compute-acceptance'"
 	done
 fi
 
 # Create CNS nodes grouping if CNS is enabled
 echo $(date) " - Creating CNS nodes grouping"
-if [ $CNSCOUNT -gt 9 ]
-then
-	# If more than 10 cns nodes need to create groups 01 - 09 separately than 10 and higher
-    for (( c=1; c<=9; c++ ))
-    do
-        cnsgroup="$cnsgroup
-${CNS}0$c openshift_hostname=${CNS}0$c openshift_node_group_name='node-config-compute-cns'"
-    done
-
-	for (( c=10; c<=$CNSCOUNT; c++ ))
-    do
-        cnsgroup="$cnsgroup
-$CNS$c openshift_hostname=$CNS$c openshift_node_group_name='node-config-compute-cns'"
-    done
-else
-	for (( c=1; c<=$CNSCOUNT; c++ ))
-    do
-        cnsgroup="$cnsgroup
-${CNS}0$c openshift_hostname=${CNS}0$c openshift_node_group_name='node-config-compute-cns'"
-    done
-fi
+for (( c=1; c<=$CNSCOUNT; c++ ))
+do
+	cnsgroup="$cnsgroup
+${CNS}${HOSTSUFFIX}$c openshift_hostname=${CNS}${HOSTSUFFIX}$c openshift_node_group_name='node-config-compute-cns'"
+done
 
 # Setting the HA Mode if more than one master
 if [ $MASTERCOUNT != 1 ]
@@ -313,8 +264,8 @@ $infragroup
 $nodegroup
 $cnsgroup
 $toolsnodegroup
-$productionnodegroup
-$acceptancenodegroup
+$prodtestnodegroup
+$accdevnodegroup
 EOF
 
 # Run a loop playbook to ensure DNS Hostname resolution is working prior to continuing with script
@@ -438,14 +389,14 @@ openshift_logging_curator_nodeselector={"node-role.kubernetes.io/infra":"true"}
 
 # host group for masters
 [masters]
-$MASTER[01:${MASTERLIST}]
+$MASTER[${HOSTSUFFIX}1:${MASTERLIST}]
 
 # host group for etcd
 [etcd]
-$MASTER[01:${MASTERLIST}]
+$MASTER[${HOSTSUFFIX}1:${MASTERLIST}]
 
 [master0]
-${MASTER}01
+${MASTER}${HOSTSUFFIX}1
 
 # Only populated when CNS is enabled
 [glusterfs]
@@ -456,8 +407,8 @@ $cnsglusterinfo
 $mastergroup
 $infragroup
 $toolsnodegroup
-$productionnodegroup
-$acceptancenodegroup
+$prodtestnodegroup
+$accdevnodegroup
 $cnsgroup
 
 # host group for adding new nodes

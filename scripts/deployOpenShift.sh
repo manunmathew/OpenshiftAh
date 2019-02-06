@@ -119,7 +119,8 @@ fi
 echo $(date) " - Create variable for routing certificate based on certificate type"
 if [[ $CUSTOMROUTINGCERTTYPE == "custom" ]]
 then
-	ROUTINGCERTIFICATE="openshift_hosted_router_certificate={\"cafile\": \"/tmp/routingca.pem\", \"certfile\": \"/tmp/routingcert.pem\", \"keyfile\": \"/tmp/routingkey.pem\"}"
+	ROUTINGCERTIFICATE="openshift_hosted_router_certificate={\"cafile\": \"/tmp/routingca.pem\", \"certfile\": \"/tmp/routingcert.pem\", \"keyfile\": \"/tmp/routingkey.pem\"}
+openshift_hosted_registry_routecertificates={\"cafile\": \"/tmp/routingca.pem\", \"certfile\": \"/tmp/routingcert.pem\", \"keyfile\": \"/tmp/routingkey.pem\"}"
 else
 	ROUTINGCERTIFICATE=""
 fi
@@ -138,7 +139,7 @@ fi
 echo $(date) " - Create variable for master cluster address based on cluster type"
 if [[ $MASTERCLUSTERTYPE == "private" ]]
 then
-	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=${MASTER}01
+	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=${MASTER}${HOSTSUFFIX}1
 openshift_master_cluster_public_hostname=$PRIVATEDNS
 openshift_master_cluster_public_vip=$PRIVATEIP"
 else
@@ -354,6 +355,7 @@ openshift_hosted_registry_storage_azure_blob_accountname=$REGISTRYSA
 openshift_hosted_registry_storage_azure_blob_accountkey=$ACCOUNTKEY
 openshift_hosted_registry_storage_azure_blob_container=registry
 openshift_hosted_registry_storage_azure_blob_realm=$DOCKERREGISTRYREALM
+openshift_hosted_registry_routetermination=reencrypt
 
 # Deploy Service Catalog
 openshift_enable_service_catalog=false
@@ -453,7 +455,7 @@ fi
 # Install OpenShift Atomic Client
 cd /root
 mkdir .kube
-runuser ${SUDOUSER} -c "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${SUDOUSER}@${MASTER}01:~/.kube/config /tmp/kube-config"
+runuser ${SUDOUSER} -c "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${SUDOUSER}@${MASTER}${HOSTSUFFIX}1:~/.kube/config /tmp/kube-config"
 cp /tmp/kube-config /root/.kube/config
 mkdir /home/${SUDOUSER}/.kube
 cp /tmp/kube-config /home/${SUDOUSER}/.kube/config
@@ -471,7 +473,7 @@ runuser $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-play
 
 # Adding some labels back because they go missing
 echo $(date) " - Adding api and logging labels"
-runuser -l $SUDOUSER -c  "oc label --overwrite nodes ${MASTER}01 openshift-infra=apiserver"
+runuser -l $SUDOUSER -c  "oc label --overwrite nodes ${MASTER}${HOSTSUFFIX}1 openshift-infra=apiserver"
 runuser -l $SUDOUSER -c  "oc label --overwrite nodes --all logging-infra-fluentd=true logging=true"
 
 # Installing Service Catalog, Ansible Service Broker and Template Service Broker

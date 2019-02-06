@@ -2686,10 +2686,10 @@
 						"value": "[variables('openshiftToolsNodeHostname')]"
 					},
 					"openshiftProdTestNodeHostname": {
-						"value": "[variables('openshiftTestNodeHostname')]"
+						"value": "[variables('openshiftProductionNodeHostname')]"
 					},
 					"openshiftAccDevNodeHostname": {
-						"value": "[variables('openshiftDevelopmentNodeHostname')]"
+						"value": "[variables('openshiftAcceptanceNodeHostname')]"
 					},
 					"masterInstanceCount": {
 						"value": "[parameters('masterInstanceCount')]"
@@ -2704,10 +2704,10 @@
 						"value": "[parameters('toolsNodeInstanceCount')]"
 					},
 					"prodtestNodeInstanceCount": {
-						"value": "[parameters('testNodeInstanceCount')]"
+						"value": "[parameters('productionNodeInstanceCount')]"
 					},
 					"accdevNodeInstanceCount": {
-						"value": "[parameters('developmentNodeInstanceCount')]"
+						"value": "[parameters('acceptanceNodeInstanceCount')]"
 					},
 					"storageKind": {
 						"value": "[parameters('storageKind')]"

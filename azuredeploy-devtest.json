@@ -127,6 +127,18 @@
 				"description": "Custom tags to apply to resources"
 			}
 		},
+		"toolsCustomTags": {
+			"type": "object",
+			"defaultValue": {
+				"applicationId": "Application ID",
+				"applicationName": "OpenShift Container Platform cluster",
+				"businessUnitName": "Business Unit",
+				"environment": "Environment"
+			},
+			"metadata": {
+				"description": "Custom tags to apply to resources"
+			}
+		},
 		"testCustomTags": {
 			"type": "object",
 			"defaultValue": {
@@ -665,7 +677,7 @@
 		"openshiftMasterHostname": "[concat(variables('simplifiedClusterPrefix'), 'ploscm')]",
 		"openshiftInfraHostname": "[concat(variables('simplifiedClusterPrefix'), 'plosci')]",
 		"openshiftCnsHostname": "[concat(variables('simplifiedClusterPrefix'), 'ploscc')]",
-		"openshiftToolsNodeHostname": "[concat(variables('simplifiedClusterPrefix'), 'plosca')]",
+		"openshiftToolsNodeHostname": "[concat(variables('simplifiedClusterPrefix'), 'alosca')]",
 		"openshiftTestNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'tlosca')]",
 		"openshiftDevelopmentNodeHostname": "[concat(variables('simplifiedClusterPrefix2'), 'dlosca')]",
 		"diagStorageAccountM": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscm11')]",
@@ -1408,7 +1420,7 @@
 						"value": "[variables('subnetCreateTemplateUrl')]"
 					},
 					"openshiftClusterPrefix": {
-						"value": "[concat(parameters('openshiftClusterPrefix'), '-Prd')]"
+						"value": "[concat(parameters('openshiftClusterPrefix'), '-Acc')]"
 					},
 					"simplifiedClusterPrefix": {
 						"value": "[variables('simplifiedClusterPrefix')]"
@@ -1447,13 +1459,13 @@
 						"value": "[parameters('toolsNodeInstanceCount')]"
 					},
 					"nameSuffix": {
-						"value": "11"
+						"value": "01"
 					},
 					"hostSuffix": {
-						"value": "1"
+						"value": "0"
 					},
 					"customTags": {
-						"value": "[parameters('coreInfraCustomTags')]"
+						"value": "[parameters('toolsCustomTags')]"
 					}
 				}
 			}

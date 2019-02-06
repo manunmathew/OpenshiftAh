@@ -127,6 +127,18 @@
 				"description": "Custom tags to apply to resources"
 			}
 		},
+		"toolsCustomTags": {
+			"type": "object",
+			"defaultValue": {
+				"applicationId": "Application ID",
+				"applicationName": "OpenShift Container Platform cluster",
+				"businessUnitName": "Business Unit",
+				"environment": "Environment"
+			},
+			"metadata": {
+				"description": "Custom tags to apply to resources"
+			}
+		},
 		"productionCustomTags": {
 			"type": "object",
 			"defaultValue": {
@@ -1453,7 +1465,7 @@
 						"value": "0"
 					},
 					"customTags": {
-						"value": "[parameters('coreInfraCustomTags')]"
+						"value": "[parameters('toolsCustomTags')]"
 					}
 				}
 			}

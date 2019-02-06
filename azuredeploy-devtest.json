@@ -669,14 +669,14 @@
 			{ "name": "[variables('diagStorageAccountC')]"}
 		],
 		"availabilitySetArray": [
-			{ "name": "[concat(parameters('openshiftClusterPrefix'), '-Prd-As-Oscm-01')]", "tagName": "MasterAvailabilitySet" },
-			{ "name": "[concat(parameters('openshiftClusterPrefix'), '-Prd-As-Osci-01')]", "tagName": "InfraAvailabilitySet" },
-			{ "name": "[concat(parameters('openshiftClusterPrefix'), '-Prd-As-Oscc-01')]", "tagName": "CNSAvailabilitySet" }
+			{ "name": "[concat(parameters('openshiftClusterPrefix'), '-Prd-As-Oscm-11')]", "tagName": "MasterAvailabilitySet" },
+			{ "name": "[concat(parameters('openshiftClusterPrefix'), '-Prd-As-Osci-11')]", "tagName": "InfraAvailabilitySet" },
+			{ "name": "[concat(parameters('openshiftClusterPrefix'), '-Prd-As-Oscc-11')]", "tagName": "CNSAvailabilitySet" }
 		],
 		"nodeGroupAvailabilitySetArray": [
-			{ "name": "[concat(parameters('openshiftClusterPrefix'), '-Prd-As-Osca-01')]", "tagName": "ToolNodeGroupAvailabilitySet" },
-			{ "name": "[concat(parameters('openshiftClusterPrefix2'), '-Prd-As-Osca-01')]", "tagName": "TestNodeGroupAvailabilitySet" },
-			{ "name": "[concat(parameters('openshiftClusterPrefix2'), '-Acc-As-Osca-01')]", "tagName": "DevelopmentNodeGroupAvailabilitySet" }
+			{ "name": "[concat(parameters('openshiftClusterPrefix'), '-Prd-As-Osca-11')]", "tagName": "ToolNodeGroupAvailabilitySet" },
+			{ "name": "[concat(parameters('openshiftClusterPrefix2'), '-Prd-As-Osca-11')]", "tagName": "TestNodeGroupAvailabilitySet" },
+			{ "name": "[concat(parameters('openshiftClusterPrefix2'), '-Acc-As-Osca-11')]", "tagName": "DevelopmentNodeGroupAvailabilitySet" }
 		],
 		"bastionIp": "[concat(variables('masterFirstAddrPrefix'), add(int(variables('masterFirstAddrOctets4split')[0]),14))]",
 		"masterFirstAddrOctets": "[split(parameters('masterSubnetPrefix'),'.')]",

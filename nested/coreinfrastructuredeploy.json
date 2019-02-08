@@ -766,7 +766,7 @@
 			"tags": "[parameters('customTags')]",
 			"dependsOn": [
 				"[if(equals(parameters('routerClusterType'), 'public'), concat('Microsoft.Network/publicIPAddresses/', parameters('bastionPublicIp')), 'availabiltySetLoop')]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscm-01')]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscm-', parameters('nameSuffix'))]",
 				"CreateMasterSubnet"
 			],
 			"properties": {

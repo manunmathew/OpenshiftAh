@@ -1589,7 +1589,7 @@
 						"value": "[variables('diagStorageAccountD')]"
 					},
 					"openshiftClusterPrefix": {
-						"value": "[concat(parameters('openshiftClusterPrefix2'), '-Dev)]"
+						"value": "[concat(parameters('openshiftClusterPrefix2'), '-Dev')]"
 					},
 					"simplifiedClusterPrefix": {
 						"value": "[variables('simplifiedClusterPrefix2')]"

@@ -479,6 +479,20 @@
 				"description": "CIDR used for the cns subnet - needs to be a subset of the addressPrefix - default is 10.3.0.0/16"
 			}
 		},
+		"toolsVirtualNetworkName": {
+			"type": "string",
+			"defaultValue": "testvnet",
+			"metadata": {
+			"description": "Name of the vNet for tools nodes"
+			}
+		},
+		"toolsVirtualNetworkResourceGroup": {
+			"type": "string",
+			"defaultValue": "testvnetrg",
+			"metadata": {
+			"description": "Name of the tools vNet resource group"
+			}
+		},
 		"toolsSubnetName": {
 			"type": "string",
 			"defaultValue": "toolssubnet",
@@ -683,10 +697,10 @@
 		"diagStorageAccountM": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscm11')]",
 		"diagStorageAccountI": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosci11')]",
 		"diagStorageAccountC": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscc11')]",
-		"diagStorageAccountT": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscp01')]",
+		"diagStorageAccountT": "[concat(variables('simplifiedClusterPrefix'), 'accsaoscp01')]",
 		"diagStorageAccountTst": "[concat(variables('simplifiedClusterPrefix2'), 'tstsaosca01')]",
 		"diagStorageAccountD": "[concat(variables('simplifiedClusterPrefix2'), 'devsaosca01')]",
-		"newStorageAccountRegistry": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosccr01')]",
+		"newStorageAccountRegistry": "[concat(variables('simplifiedClusterPrefix'), 'devtstsaosccr01')]",
 		"coreInfraDiagStorageAccountArray": [
 			{ "name": "[variables('diagStorageAccountM')]"},
 			{ "name": "[variables('diagStorageAccountI')]"},
@@ -1435,10 +1449,10 @@
 						"value": "[variables('nodeGroupAvailabilitySetArray')[0].name]"
 					},
 					"virtualNetworkResourceGroupName": {
-						"value": "[parameters('coreInfraVirtualNetworkResourceGroup')]"
+						"value": "[parameters('toolsVirtualNetworkResourceGroup')]"
 					},
 					"existingVnetName": {
-						"value": "[parameters('coreInfraVirtualNetworkName')]"
+						"value": "[parameters('toolsVirtualNetworkName')]"
 					},
 					"subnetName": {
 						"value": "[parameters('toolsSubnetName')]"

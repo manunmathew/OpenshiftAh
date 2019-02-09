@@ -36,8 +36,8 @@ export NODEAVAILIBILITYSET=${29}
 export MASTERCLUSTERTYPE=${30}
 export PRIVATEIP=${31}
 export PRIVATEDNS=${32}
-export PRODUCTION=${33}
-export ACCEPTANCE=${34}
+export PRODTEST=${33}
+export ACCDEV=${34}
 export CUSTOMROUTINGCERTTYPE=${35}
 export CUSTOMMASTERCERTTYPE=${36}
 export PRODTESTCOUNT="${37}"
@@ -105,8 +105,12 @@ fi
 # Create custom node group definitions
 if [[ $CLUSTERTYPE == "prodacc" ]]
 then
+	prodtestnode=production
+	accdevnode=acceptance
 	NODEGROUP="openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true']}, {'name': 'node-config-compute-cns', 'labels': ['nodepool=cns']}, {'name': 'node-config-compute-tools', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=ToolsProduction']}, {'name': 'node-config-compute-acceptance', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Acceptance']}, {'name': 'node-config-compute-production', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Production']}]"
 else
+	prodtestnode=test
+	accdevnode=development
 	NODEGROUP="openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true']}, {'name': 'node-config-compute-cns', 'labels': ['nodepool=cns']}, {'name': 'node-config-compute-tools', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=ToolsAcceptance']}, {'name': 'node-config-compute-development', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Development']}, {'name': 'node-config-compute-test', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Test']}]"
 fi
 
@@ -208,20 +212,20 @@ then
 	for (( c=1; c<=9; c++ ))
 	do
     prodtestnodegroup="$prodtestnodegroup
-${PRODUCTION}0$c openshift_hostname=${PRODUCTION}0$c openshift_node_group_name='node-config-compute-production'"
+${PRODTEST}0$c openshift_hostname=${PRODTEST}0$c openshift_node_group_name='node-config-compute-$prodtestnode'"
 	done
 
 	for (( c=10; c<=$PRODTESTCOUNT; c++ ))
 	do
     prodtestnodegroup="$prodtestnodegroup
-$PRODUCTION$c openshift_hostname=$PRODUCTION$c openshift_node_group_name='node-config-compute-production'"
+$PRODTEST$c openshift_hostname=$PRODTEST$c openshift_node_group_name='node-config-compute-$prodtestnode'"
 	done
 else
 	# If less than 10 tools nodes
 	for (( c=1; c<=$PRODTESTCOUNT; c++ ))
 	do
     prodtestnodegroup="$prodtestnodegroup
-${PRODUCTION}0$c openshift_hostname=${PRODUCTION}0$c openshift_node_group_name='node-config-compute-production'"
+${PRODTEST}0$c openshift_hostname=${PRODTEST}0$c openshift_node_group_name='node-config-compute-$prodtestnode'"
 	done
 fi
 
@@ -233,19 +237,19 @@ then
 	for (( c=1; c<=9; c++ ))
 	do
 		accdevnodegroup="$accdevnodegroup
-${ACCEPTANCE}0$c openshift_hostname=${ACCEPTANCE}0$c openshift_node_group_name='node-config-compute-acceptance'"
+${ACCDEV}0$c openshift_hostname=${ACCDEV}0$c openshift_node_group_name='node-config-compute-$accdevnode'"
 	done
 	
 	for (( c=10; c<=$ACCDEVCOUNT; c++ ))
 	do
 		accdevnodegroup="$accdevnodegroup
-$ACCEPTANCE$c openshift_hostname=$ACCEPTANCE$c openshift_node_group_name='node-config-compute-acceptance'"
+$ACCDEV$c openshift_hostname=$ACCDEV$c openshift_node_group_name='node-config-compute-$accdevnode'"
 	done
 else
 	for (( c=1; c<=$ACCDEVCOUNT; c++ ))
 	do
 		accdevnodegroup="$accdevnodegroup
-${ACCEPTANCE}0$c openshift_hostname=${ACCEPTANCE}0$c openshift_node_group_name='node-config-compute-acceptance'"
+${ACCDEV}0$c openshift_hostname=${ACCDEV}0$c openshift_node_group_name='node-config-compute-$accdevnode'"
 	done
 fi
 

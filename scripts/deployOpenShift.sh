@@ -295,7 +295,7 @@ then
     for (( c=1; c<=$CNSCOUNT; c++ ))
     do
         runuser $SUDOUSER -c "ssh-keyscan -H ${CNS}${HOSTSUFFIX}$c >> ~/.ssh/known_hosts"
-        drive=$(runuser $SUDOUSER -c "ssh ${CNS${HOSTSUFFIX}$c 'sudo /usr/sbin/fdisk -l'" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
+        drive=$(runuser $SUDOUSER -c "ssh ${CNS}${HOSTSUFFIX}$c 'sudo /usr/sbin/fdisk -l'" | awk '$1 == "Disk" && $2 ~ /^\// && ! /mapper/ {if (drive) print drive; drive = $2; sub(":", "", drive);} drive && /^\// {drive = ""} END {if (drive) print drive;}')
         drive1=$(echo $drive | cut -d ' ' -f 1)
         drive2=$(echo $drive | cut -d ' ' -f 2)
         drive3=$(echo $drive | cut -d ' ' -f 3)
@@ -345,7 +345,7 @@ $ROUTINGCERTIFICATE
 $MASTERCERTIFICATE
 
 # Custom node group definitions
-openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true']}, {'name': 'node-config-compute-cns', 'labels': ['nodepool=cns']}, {'name': 'node-config-compute-tools', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=ToolsProduction']}, {'name': 'node-config-compute-acceptance', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Acceptance']}, {'name': 'node-config-compute-production', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Production']}]
+$NODEGROUP
 
 # Workaround for docker image failure
 # https://access.redhat.com/solutions/3480921

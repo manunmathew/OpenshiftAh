@@ -44,6 +44,7 @@ export PRODTESTCOUNT="${37}"
 export ACCDEVCOUNT="${38}"
 export DOMAIN="${39}"
 export HOSTSUFFIX=${40}
+export CLUSTERTYPE=${41}
 
 export BASTION=$(hostname)
 
@@ -99,6 +100,14 @@ openshift_cloudprovider_azure_location=$LOCATION"
 	else
 		SCKIND="openshift_storageclass_parameters={'kind': 'shared', 'storageaccounttype': 'Premium_LRS'}"
 	fi
+fi
+
+# Create custom node group definitions
+if [[ $CLUSTERTYPE == "prodacc" ]]
+then
+	NODEGROUP="openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true']}, {'name': 'node-config-compute-cns', 'labels': ['nodepool=cns']}, {'name': 'node-config-compute-tools', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=ToolsProduction']}, {'name': 'node-config-compute-acceptance', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Acceptance']}, {'name': 'node-config-compute-production', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Production']}]"
+else
+	NODEGROUP="openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true']}, {'name': 'node-config-compute-cns', 'labels': ['nodepool=cns']}, {'name': 'node-config-compute-tools', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=ToolsAcceptance']}, {'name': 'node-config-compute-development', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Development']}, {'name': 'node-config-compute-test', 'labels': ['node-role.kubernetes.io/compute=true', 'nodepool=Test']}]"
 fi
 
 # Cloning Ansible playbook repository
@@ -383,7 +392,7 @@ openshift_metrics_heapster_nodeselector={"node-role.kubernetes.io/infra":"true"}
 
 # Setup logging
 openshift_logging_install_logging=false
-openshift_logging_fluentd_nodeselector={"logging":"true"}
+#openshift_logging_fluentd_nodeselector={"logging":"true"}
 openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra":"true"}
 openshift_logging_kibana_nodeselector={"node-role.kubernetes.io/infra":"true"}
 openshift_logging_curator_nodeselector={"node-role.kubernetes.io/infra":"true"}
@@ -472,9 +481,9 @@ echo $(date) " - Assigning cluster admin rights to user"
 runuser $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/assignclusteradminrights.yaml"
 
 # Adding some labels back because they go missing
-echo $(date) " - Adding api and logging labels"
-runuser -l $SUDOUSER -c  "oc label --overwrite nodes ${MASTER}${HOSTSUFFIX}1 openshift-infra=apiserver"
-runuser -l $SUDOUSER -c  "oc label --overwrite nodes --all logging-infra-fluentd=true logging=true"
+# echo $(date) " - Adding api and logging labels"
+# runuser -l $SUDOUSER -c  "oc label --overwrite nodes ${MASTER}${HOSTSUFFIX}1 openshift-infra=apiserver"
+# runuser -l $SUDOUSER -c  "oc label --overwrite nodes --all logging-infra-fluentd=true logging=true"
 
 # Installing Service Catalog, Ansible Service Broker and Template Service Broker
 if [[ $AZURE == "true" || $ENABLECNS == "true" ]]

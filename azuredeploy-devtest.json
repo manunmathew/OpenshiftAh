@@ -2813,6 +2813,9 @@
 					},
 					"masterCertType": {
 						"value": "[parameters('masterCertType')]"
+					},
+					"clusterType": {
+						"value": "devtest"
 					}
 				}
 			}

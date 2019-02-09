@@ -1714,7 +1714,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('coreInfraCustomTags')]"
 					}
 				}
 			}
@@ -1793,7 +1793,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('coreInfraCustomTags')]"
 					}
 				}
 			}
@@ -1872,7 +1872,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('coreInfraCustomTags')]"
 					}
 				}
 			}
@@ -1954,7 +1954,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('coreInfraCustomTags')]"
 					}
 				}
 			}
@@ -2033,7 +2033,7 @@
 						"value": "[variables('imageReference')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('toolsCustomTags')]"
 					}
 				}
 			}
@@ -2309,7 +2309,7 @@
 						}
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('coreInfraCustomTags')]"
 					}
 				}
 			}
@@ -2366,7 +2366,7 @@
 						"value": "[parameters('rhsmBrokerPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('coreInfraCustomTags')]"
 					}
 				}
 			}
@@ -2420,7 +2420,7 @@
 						"value": "[parameters('rhsmBrokerPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('coreInfraCustomTags')]"
 					}
 				}
 			}
@@ -2474,7 +2474,7 @@
 						"value": "[parameters('rhsmPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('coreInfraCustomTags')]"
 					}
 				}
 			}
@@ -2528,7 +2528,7 @@
 						"value": "[parameters('rhsmPoolId')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('toolsCustomTags')]"
 					}
 				}
 			}
@@ -2785,7 +2785,7 @@
 						"value": "[concat(parameters('routingSubDomainType'), 'Domain')]"
 					},
 					"customTags": {
-						"value": "[parameters('testCustomTags')]"
+						"value": "[parameters('coreInfraCustomTags')]"
 					},
 					"hostSuffix": {
 						"value": "1"

@@ -2265,7 +2265,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcafile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'devtestroutingcafile', 'sshPrivateKey')]"
 						}
 					},
 					"customRoutingCertFile": {
@@ -2273,7 +2273,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingcertfile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'devtestroutingcertfile', 'sshPrivateKey')]"
 						}
 					},
 					"customRoutingKeyFile": {
@@ -2281,7 +2281,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'routingkeyfile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('routingCertType'),'custom'), 'devtestroutingkeyfile', 'sshPrivateKey')]"
 						}
 					},
 					"customMasterCaFile": {
@@ -2289,7 +2289,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercafile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'devtestmastercafile', 'sshPrivateKey')]"
 						}
 					},
 					"customMasterCertFile": {
@@ -2297,7 +2297,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'mastercertfile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'devtestmastercertfile', 'sshPrivateKey')]"
 						}
 					},
 					"customMasterKeyFile": {
@@ -2305,7 +2305,7 @@
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'masterkeyfile', 'sshPrivateKey')]"
+							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'devtestmasterkeyfile', 'sshPrivateKey')]"
 						}
 					},
 					"customTags": {

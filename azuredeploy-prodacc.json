@@ -479,6 +479,20 @@
 				"description": "CIDR used for the cns subnet - needs to be a subset of the addressPrefix - default is 10.3.0.0/16"
 			}
 		},
+		"toolsVirtualNetworkName": {
+			"type": "string",
+			"defaultValue": "testvnet",
+			"metadata": {
+			"description": "Name of the vNet for tools nodes"
+			}
+		},
+		"toolsVirtualNetworkResourceGroup": {
+			"type": "string",
+			"defaultValue": "testvnetrg",
+			"metadata": {
+			"description": "Name of the tools vNet resource group"
+			}
+		},
 		"toolsSubnetName": {
 			"type": "string",
 			"defaultValue": "toolssubnet",

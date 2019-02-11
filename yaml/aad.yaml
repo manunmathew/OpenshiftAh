@@ -1,0 +1,21 @@
+  - name: <App Registration Name>
+    challenge: false
+    login: true
+    mappingMethod: claim
+    provider:
+      apiVersion: v1
+      kind: OpenIDIdentityProvider
+      clientID: <appId>
+      clientSecret: <Strong Password>
+      claims:
+        id:
+        - sub
+        preferredUsername:
+        - unique_name
+        name:
+        - name
+        email:
+        - email
+      urls:
+        authorize: https://login.microsoftonline.com/<tenant Id>/oauth2/authorize
+        token: https://login.microsoftonline.com/<tenant Id>/oauth2/token

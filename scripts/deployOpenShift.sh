@@ -132,8 +132,7 @@ fi
 echo $(date) " - Create variable for routing certificate based on certificate type"
 if [[ $CUSTOMROUTINGCERTTYPE == "custom" ]]
 then
-	ROUTINGCERTIFICATE="openshift_hosted_router_certificate={\"cafile\": \"/tmp/routingca.pem\", \"certfile\": \"/tmp/routingcert.pem\", \"keyfile\": \"/tmp/routingkey.pem\"}
-openshift_hosted_registry_routecertificates={\"cafile\": \"/tmp/routingca.pem\", \"certfile\": \"/tmp/routingcert.pem\", \"keyfile\": \"/tmp/routingkey.pem\"}"
+	ROUTINGCERTIFICATE="openshift_hosted_router_certificate={\"cafile\": \"/tmp/routingca.pem\", \"certfile\": \"/tmp/routingcert.pem\", \"keyfile\": \"/tmp/routingkey.pem\"}"
 else
 	ROUTINGCERTIFICATE=""
 fi
@@ -328,8 +327,8 @@ ansible_become=yes
 openshift_install_examples=true
 deployment_type=openshift-enterprise
 openshift_release=v3.11
-#openshift_image_tag=v3.11
-#openshift_pkg_version=-3.11
+openshift_image_tag=v3.11.51
+openshift_pkg_version=-3.11.51
 docker_udev_workaround=True
 openshift_use_dnsmasq=true
 openshift_master_default_subdomain=$ROUTING

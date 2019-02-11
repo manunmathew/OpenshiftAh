@@ -86,7 +86,8 @@ subscription-manager repos \
 
 # Update system to latest packages
 echo $(date) " - Update system to latest packages"
-yum -y update --releasever=7.5 --exclude=WALinuxAgent
+# yum -y update --releasever=7.5 --exclude=WALinuxAgent
+yum -y update --exclude=WALinuxAgent
 echo $(date) " - System update complete"
 
 # Install base packages and update system to latest packages

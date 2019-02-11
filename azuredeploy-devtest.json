@@ -687,7 +687,7 @@
 		"masterClusterDns": "[toLower(parameters('masterClusterDns'))]",
 		"simplifiedClusterPrefix": "[toLower(replace(parameters('openshiftClusterPrefix'),'-', ''))]",
 		"simplifiedClusterPrefix2": "[toLower(replace(parameters('openshiftClusterPrefix2'),'-', ''))]",
-		"openshiftBastionHostname": "[concat(variables('simplifiedClusterPrefix'), 'ploscb01')]",
+		"openshiftBastionHostname": "[concat(variables('simplifiedClusterPrefix'), 'ploscb11')]",
 		"openshiftMasterHostname": "[concat(variables('simplifiedClusterPrefix'), 'ploscm')]",
 		"openshiftInfraHostname": "[concat(variables('simplifiedClusterPrefix'), 'plosci')]",
 		"openshiftCnsHostname": "[concat(variables('simplifiedClusterPrefix'), 'ploscc')]",

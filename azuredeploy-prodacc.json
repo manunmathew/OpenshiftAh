@@ -700,7 +700,7 @@
 		"diagStorageAccountT": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscp01')]",
 		"diagStorageAccountP": "[concat(variables('simplifiedClusterPrefix2'), 'prdsaosca01')]",
 		"diagStorageAccountA": "[concat(variables('simplifiedClusterPrefix2'), 'accsaosca01')]",
-		"newStorageAccountRegistry": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosccr01')]",
+		"newStorageAccountRegistry": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscr01')]",
 		"coreInfraDiagStorageAccountArray": [
 			{ "name": "[variables('diagStorageAccountM')]"},
 			{ "name": "[variables('diagStorageAccountI')]"},

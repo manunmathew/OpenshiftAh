@@ -582,7 +582,7 @@ EOF
 
 # Configure for Azure AD Authentication
 echo $(date) " - Configure cluster for private masters"
-runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/add-azuread-auth.yaml"
+runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/add-azuread-auth.yaml -e @~/openshift-container-platform-playbooks/vars.yaml"
 
 if [ $? -eq 0 ]
 then

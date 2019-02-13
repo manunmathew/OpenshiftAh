@@ -83,10 +83,10 @@ fi
 if [[ $AZURE == "true" ]]
 then
     CLOUDKIND="openshift_cloudprovider_kind=azure
-openshift_cloudprovider_azure_client_id=\"{{ aadClientId }}\"
-openshift_cloudprovider_azure_client_secret=\"{{ aadClientSecret }}\"
-openshift_cloudprovider_azure_tenant_id=\"{{ tenantId }}\"
-openshift_cloudprovider_azure_subscription_id=\"{{ subscriptionId }}\"
+openshift_cloudprovider_azure_client_id=$AADCLIENTID
+openshift_cloudprovider_azure_client_secret=$AADCLIENTSECRET
+openshift_cloudprovider_azure_tenant_id=$TENANTID
+openshift_cloudprovider_azure_subscription_id=$SUBSCRIPTIONID
 openshift_cloudprovider_azure_cloud=$CLOUDNAME
 openshift_cloudprovider_azure_vnet_name=$VNETNAME
 openshift_cloudprovider_azure_security_group_name=$NODENSG
@@ -454,12 +454,12 @@ sleep 20
 
 # Run OpenShift Container Platform prerequisites playbook
 echo $(date) " - Running Prerequisites via Ansible Playbook"
-runuser -l $SUDOUSER -c "ansible-playbook -e openshift_cloudprovider_azure_client_id=$AADCLIENTID -e openshift_cloudprovider_azure_client_secret=\"$AADCLIENTSECRET\" -e openshift_cloudprovider_azure_tenant_id=$TENANTID -e openshift_cloudprovider_azure_subscription_id=$SUBSCRIPTIONID -f 30 /usr/share/ansible/openshift-ansible/playbooks/prerequisites.yml"
+runuser -l $SUDOUSER -c "ansible-playbook -f 30 /usr/share/ansible/openshift-ansible/playbooks/prerequisites.yml"
 echo $(date) " - Prerequisites check complete"
 
 # Initiating installation of OpenShift Container Platform using Ansible Playbook
 echo $(date) " - Installing OpenShift Container Platform via Ansible Playbook"
-runuser -l $SUDOUSER -c "ansible-playbook -e openshift_cloudprovider_azure_client_id=$AADCLIENTID -e openshift_cloudprovider_azure_client_secret=\"$AADCLIENTSECRET\" -e openshift_cloudprovider_azure_tenant_id=$TENANTID -e openshift_cloudprovider_azure_subscription_id=$SUBSCRIPTIONID -f 30 /usr/share/ansible/openshift-ansible/playbooks/deploy_cluster.yml"
+runuser -l $SUDOUSER -c "ansible-playbook -f 30 /usr/share/ansible/openshift-ansible/playbooks/deploy_cluster.yml"
 if [ $? -eq 0 ]
 then
     echo $(date) " - OpenShift Cluster installed successfully"
@@ -495,7 +495,7 @@ runuser $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-play
 # Installing Service Catalog, Ansible Service Broker and Template Service Broker
 if [[ $AZURE == "true" || $ENABLECNS == "true" ]]
 then
-    runuser -l $SUDOUSER -c "ansible-playbook -e openshift_cloudprovider_azure_client_id=$AADCLIENTID -e openshift_cloudprovider_azure_client_secret=\"$AADCLIENTSECRET\" -e openshift_cloudprovider_azure_tenant_id=$TENANTID -e openshift_cloudprovider_azure_subscription_id=$SUBSCRIPTIONID -e openshift_enable_service_catalog=true -f 30 /usr/share/ansible/openshift-ansible/playbooks/openshift-service-catalog/config.yml"
+    runuser -l $SUDOUSER -c "ansible-playbook -e openshift_enable_service_catalog=true -f 30 /usr/share/ansible/openshift-ansible/playbooks/openshift-service-catalog/config.yml"
 fi
 
 # Configure Metrics
@@ -505,7 +505,7 @@ then
     echo $(date) "- Deploying Metrics"
     if [[ $AZURE == "true" || $ENABLECNS == "true" ]]
     then
-        runuser -l $SUDOUSER -c "ansible-playbook -e openshift_cloudprovider_azure_client_id=$AADCLIENTID -e openshift_cloudprovider_azure_client_secret=\"$AADCLIENTSECRET\" -e openshift_cloudprovider_azure_tenant_id=$TENANTID -e openshift_cloudprovider_azure_subscription_id=$SUBSCRIPTIONID -e openshift_metrics_install_metrics=True -e openshift_metrics_cassandra_storage_type=dynamic -f 30 /usr/share/ansible/openshift-ansible/playbooks/openshift-metrics/config.yml"
+        runuser -l $SUDOUSER -c "ansible-playbook -e openshift_metrics_install_metrics=True -e openshift_metrics_cassandra_storage_type=dynamic -f 30 /usr/share/ansible/openshift-ansible/playbooks/openshift-metrics/config.yml"
     else
         runuser -l $SUDOUSER -c "ansible-playbook -e openshift_metrics_install_metrics=True /usr/share/ansible/openshift-ansible/playbooks/openshift-metrics/config.yml"
     fi
@@ -526,7 +526,7 @@ then
     echo $(date) "- Deploying Logging"
     if [[ $AZURE == "true" || $ENABLECNS == "true" ]]
     then
-        runuser -l $SUDOUSER -c "ansible-playbook -e openshift_cloudprovider_azure_client_id=$AADCLIENTID -e openshift_cloudprovider_azure_client_secret=\"$AADCLIENTSECRET\" -e openshift_cloudprovider_azure_tenant_id=$TENANTID -e openshift_cloudprovider_azure_subscription_id=$SUBSCRIPTIONID -e openshift_logging_install_logging=True -e openshift_logging_es_pvc_dynamic=true -f 30 /usr/share/ansible/openshift-ansible/playbooks/openshift-logging/config.yml"
+        runuser -l $SUDOUSER -c "ansible-playbook -e openshift_logging_install_logging=True -e openshift_logging_es_pvc_dynamic=true -f 30 /usr/share/ansible/openshift-ansible/playbooks/openshift-logging/config.yml"
     else
         runuser -l $SUDOUSER -c "ansible-playbook -e openshift_logging_install_logging=True -f 30 /usr/share/ansible/openshift-ansible/playbooks/openshift-logging/config.yml"
     fi
@@ -554,13 +554,42 @@ then
 	runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/activate-private-lb-fqdn.31x.yaml"
 fi
 
-# Setting Masters to non-schedulable
-#echo $(date) " - Setting Masters to non-schedulable"
-#runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/reset-masters-non-schedulable.yaml"
+# Creating variables file for Azure AD configuration playbook
+echo $(date) " - Creating variables file for future playbooks"
+cat > /home/$SUDOUSER/openshift-container-platform-playbooks/aad.yaml <<EOF
+  - name: AzureAD
+    challenge: false
+    login: true
+    mappingMethod: claim
+    provider:
+      apiVersion: v1
+      kind: OpenIDIdentityProvider
+      clientID: $AADCLIENTID
+      clientSecret: $AADCLIENTSECRET
+      claims:
+        id:
+        - sub
+        preferredUsername:
+        - unique_name
+        name:
+        - name
+        email:
+        - email
+      urls:
+        authorize: https://login.microsoftonline.com/$TENANTID/oauth2/authorize
+        token: https://login.microsoftonline.com/$TENANTID/oauth2/token
+EOF
 
-# Re-enabling requiretty
-#echo $(date) " - Re-enabling requiretty"
-#sed -i -e "s/# Defaults    requiretty/Defaults    requiretty/" /etc/sudoers
+# Configure for Azure AD Authentication
+echo $(date) " - Configure cluster for private masters"
+runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/add-azuread-auth.yaml"
+
+if [ $? -eq 0 ]
+then
+	echo $(date) " - Azure AD authentication configuration added to master-config.yaml"
+else
+	echo $(date) " - Failed to add Azure AD authentication configuration to master-config.yaml"
+fi
 
 # Delete yaml files
 echo $(date) " - Deleting unecessary files"
@@ -570,7 +599,7 @@ rm -rf /home/${SUDOUSER}/openshift-container-platform-playbooks
 echo $(date) " - Delete pem files"
 rm -rf /tmp/*.pem
 
-echo $(date) " - Sleep for 30"
-sleep 30
+echo $(date) " - Sleep for 15"
+sleep 15
 
 echo $(date) " - Script complete"

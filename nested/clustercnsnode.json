@@ -133,7 +133,7 @@
 				},
 				"caching": "ReadWrite",
 				"createOption": "FromImage",
-				"diskSizeGB": 64,
+				"diskSizeGB": 127,
 				"osType": "Linux"
 			},
 			"dataDisks": [{

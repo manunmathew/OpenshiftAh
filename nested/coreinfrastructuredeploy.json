@@ -604,6 +604,7 @@
 				"count": "[length(parameters('availabilitySetArray'))]"
 			}
 		}, {
+			"condition": false,
 			"type": "Microsoft.Network/loadBalancers",
 			"name": "[parameters('masterLoadBalancerName')]",
 			"location": "[parameters('location')]",
@@ -651,6 +652,7 @@
 				}]
 			}
 		}, {
+			"condition": false,
 			"type": "Microsoft.Network/loadBalancers",
 			"name": "[parameters('infraLoadBalancerName')]",
 			"location": "[parameters('location')]",
@@ -789,7 +791,6 @@
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"tags": "[parameters('customTags')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/loadBalancers/', parameters('masterLoadBalancerName'))]",
 				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscm-', parameters('nameSuffix'))]",
 				"CreateMasterSubnet"
 			],
@@ -805,10 +806,7 @@
 						"privateIPAddress": "[concat(parameters('masterFirstAddrPrefix'), copyindex(parameters('masterFirstAddrOctet4')))]",
 						"subnet": {
 							"id": "[resourceId(parameters('coreInfraVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('coreInfraVirtualNetworkName'), parameters('masterSubnetName'))]"
-						},
-						"loadBalancerBackendAddressPools": [{
-							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', parameters('masterLoadBalancerName'), '/backendAddressPools/loadBalancerBackEnd')]"
-						}]
+						}
 					}
 				}],
 				"enableAcceleratedNetworking": "[parameters('enableMasterAcceleratedNetworking')]"
@@ -820,7 +818,6 @@
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"tags": "[parameters('customTags')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/loadBalancers/', parameters('infraLoadBalancerName'))]",
 				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Osci-', parameters('nameSuffix'))]",
 				"CreateInfraSubnet"
 			],
@@ -836,10 +833,7 @@
 						"privateIPAddress": "[concat(parameters('infraFirstAddrPrefix'), copyindex(parameters('infraFirstAddrOctet4')))]",
 						"subnet": {
 							"id": "[resourceId(parameters('coreInfraVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('coreInfraVirtualNetworkName'), parameters('infraSubnetName'))]"
-						},
-						"loadBalancerBackendAddressPools": [{
-							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', parameters('infraLoadBalancerName'), '/backendAddressPools/loadBalancerBackEnd')]"
-						}]
+						}
 					}
 				}],
 				"enableAcceleratedNetworking": "[parameters('enableInfraAcceleratedNetworking')]"

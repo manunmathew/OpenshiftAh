@@ -151,7 +151,7 @@ fi
 echo $(date) " - Create variable for master cluster address based on cluster type"
 if [[ $MASTERCLUSTERTYPE == "private" ]]
 then
-	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=$PRIVATEDNS
+	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=${MASTER}${HOSTSUFFIX}1
 openshift_master_cluster_public_hostname=$PRIVATEDNS"
 else
 	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
@@ -547,11 +547,11 @@ domain: $DOMAIN
 EOF
 
 # Configure cluster for private masters
-# if [[ $MASTERCLUSTERTYPE == "private" ]]
-# then
-	# echo $(date) " - Configure cluster for private masters"
-	# runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/activate-private-lb-fqdn.31x.yaml"
-# fi
+if [[ $MASTERCLUSTERTYPE == "private" ]]
+then
+	echo $(date) " - Configure cluster for private masters"
+	runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/activate-private-lb-fqdn.31x.yaml"
+fi
 
 # Creating variables file for Azure AD configuration playbook
 echo $(date) " - Creating variables file for future playbooks"

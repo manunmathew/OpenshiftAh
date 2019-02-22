@@ -167,7 +167,7 @@ MASTERLIST="${HOSTSUFFIX}$MASTERCOUNT"
 for (( c=1; c<=$MASTERCOUNT; c++ ))
 do
 	mastergroup="$mastergroup
-${MASTER}${HOSTSUFFIX}$c openshift_hostname=${MASTER}${HOSTSUFFIX}$c openshift_node_group_name='node-config-master'"
+${MASTER}${HOSTSUFFIX}$c openshift_node_group_name='node-config-master'"
 done
 
 # Create Infra nodes grouping 
@@ -175,7 +175,7 @@ echo $(date) " - Creating Infra nodes grouping"
 for (( c=1; c<=$INFRACOUNT; c++ ))
 do
 	infragroup="$infragroup
-${INFRA}${HOSTSUFFIX}$c openshift_hostname=${INFRA}${HOSTSUFFIX}$c openshift_node_group_name='node-config-infra'"
+${INFRA}${HOSTSUFFIX}$c openshift_node_group_name='node-config-infra'"
 done
 
 # Create Tools node grouping
@@ -186,20 +186,20 @@ then
 	for (( c=1; c<=9; c++ ))
 	do
 		toolsnodegroup="$toolsnodegroup
-${TOOLS}0$c openshift_hostname=${TOOLS}0$c openshift_node_group_name='node-config-compute-tools'"
+${TOOLS}0$c openshift_node_group_name='node-config-compute-tools'"
 	done
 
 	for (( c=10; c<=$TOOLSCOUNT; c++ ))
 	do
 		toolsnodegroup="$toolsnodegroup
-$TOOLS$c openshift_hostname=$TOOLS$c openshift_node_group_name='node-config-compute-tools'"
+$TOOLS$c openshift_node_group_name='node-config-compute-tools'"
 	done
 else
 	# If less than 10 tools nodes
 	for (( c=1; c<=$TOOLSCOUNT; c++ ))
 	do
 		toolsnodegroup="$toolsnodegroup
-${TOOLS}0$c openshift_hostname=${TOOLS}0$c openshift_node_group_name='node-config-compute-tools'"
+${TOOLS}0$c openshift_node_group_name='node-config-compute-tools'"
 	done
 fi
 
@@ -211,20 +211,20 @@ then
 	for (( c=1; c<=9; c++ ))
 	do
     prodtestnodegroup="$prodtestnodegroup
-${PRODTEST}0$c openshift_hostname=${PRODTEST}0$c openshift_node_group_name='node-config-compute-$prodtestnode'"
+${PRODTEST}0$c openshift_node_group_name='node-config-compute-$prodtestnode'"
 	done
 
 	for (( c=10; c<=$PRODTESTCOUNT; c++ ))
 	do
     prodtestnodegroup="$prodtestnodegroup
-$PRODTEST$c openshift_hostname=$PRODTEST$c openshift_node_group_name='node-config-compute-$prodtestnode'"
+$PRODTEST$c openshift_node_group_name='node-config-compute-$prodtestnode'"
 	done
 else
 	# If less than 10 tools nodes
 	for (( c=1; c<=$PRODTESTCOUNT; c++ ))
 	do
     prodtestnodegroup="$prodtestnodegroup
-${PRODTEST}0$c openshift_hostname=${PRODTEST}0$c openshift_node_group_name='node-config-compute-$prodtestnode'"
+${PRODTEST}0$c openshift_node_group_name='node-config-compute-$prodtestnode'"
 	done
 fi
 
@@ -236,19 +236,19 @@ then
 	for (( c=1; c<=9; c++ ))
 	do
 		accdevnodegroup="$accdevnodegroup
-${ACCDEV}0$c openshift_hostname=${ACCDEV}0$c openshift_node_group_name='node-config-compute-$accdevnode'"
+${ACCDEV}0$c openshift_node_group_name='node-config-compute-$accdevnode'"
 	done
 	
 	for (( c=10; c<=$ACCDEVCOUNT; c++ ))
 	do
 		accdevnodegroup="$accdevnodegroup
-$ACCDEV$c openshift_hostname=$ACCDEV$c openshift_node_group_name='node-config-compute-$accdevnode'"
+$ACCDEV$c openshift_node_group_name='node-config-compute-$accdevnode'"
 	done
 else
 	for (( c=1; c<=$ACCDEVCOUNT; c++ ))
 	do
 		accdevnodegroup="$accdevnodegroup
-${ACCDEV}0$c openshift_hostname=${ACCDEV}0$c openshift_node_group_name='node-config-compute-$accdevnode'"
+${ACCDEV}0$c openshift_node_group_name='node-config-compute-$accdevnode'"
 	done
 fi
 
@@ -257,7 +257,7 @@ echo $(date) " - Creating CNS nodes grouping"
 for (( c=1; c<=$CNSCOUNT; c++ ))
 do
 	cnsgroup="$cnsgroup
-${CNS}${HOSTSUFFIX}$c openshift_hostname=${CNS}${HOSTSUFFIX}$c openshift_node_group_name='node-config-compute-cns'"
+${CNS}${HOSTSUFFIX}$c openshift_node_group_name='node-config-compute-cns'"
 done
 
 # Setting the HA Mode if more than one master
@@ -327,8 +327,8 @@ ansible_become=yes
 openshift_install_examples=true
 deployment_type=openshift-enterprise
 openshift_release=v3.11
-openshift_image_tag=v3.11.51
-openshift_pkg_version=-3.11.51
+#openshift_image_tag=v3.11.51
+#openshift_pkg_version=-3.11.51
 docker_udev_workaround=True
 openshift_use_dnsmasq=true
 openshift_master_default_subdomain=$ROUTING

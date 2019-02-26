@@ -1379,6 +1379,15 @@
 					"cnsSubnetPrefix": {
 						"value": "[parameters('cnsSubnetPrefix')]"
 					},
+					"toolsSubnetPrefix": {
+						"value": "[parameters('toolsSubnetPrefix')]"
+					},
+					"prodtestSubnetPrefix": {
+						"value": "[parameters('testSubnetPrefix')]"
+					},
+					"accdevSubnetPrefix": {
+						"value": "[parameters('devSubnetPrefix')]"
+					},
 					"masterInstanceCount": {
 						"value": "[parameters('masterInstanceCount')]"
 					},
@@ -1459,6 +1468,15 @@
 					},
 					"subnetPrefix": {
 						"value": "[parameters('toolsSubnetPrefix')]"
+					},
+					"masterSubnetPrefix": {
+						"value": "[parameters('masterSubnetPrefix')]"
+					},
+					"infraSubnetPrefix": {
+						"value": "[parameters('infraSubnetPrefix')]"
+					},
+					"cnsSubnetPrefix": {
+						"value": "[parameters('cnsSubnetPrefix')]"
 					},
 					"nodeFirstAddrOctet4": {
 						"value": "[variables('toolsFirstAddrOctet4')]"
@@ -1543,6 +1561,15 @@
 					"subnetPrefix": {
 						"value": "[parameters('testSubnetPrefix')]"
 					},
+					"masterSubnetPrefix": {
+						"value": "[parameters('masterSubnetPrefix')]"
+					},
+					"infraSubnetPrefix": {
+						"value": "[parameters('infraSubnetPrefix')]"
+					},
+					"cnsSubnetPrefix": {
+						"value": "[parameters('cnsSubnetPrefix')]"
+					},
 					"nodeFirstAddrOctet4": {
 						"value": "[variables('testFirstAddrOctet4')]"
 					},
@@ -1625,6 +1652,15 @@
 					},
 					"subnetPrefix": {
 						"value": "[parameters('devSubnetPrefix')]"
+					},
+					"masterSubnetPrefix": {
+						"value": "[parameters('masterSubnetPrefix')]"
+					},
+					"infraSubnetPrefix": {
+						"value": "[parameters('infraSubnetPrefix')]"
+					},
+					"cnsSubnetPrefix": {
+						"value": "[parameters('cnsSubnetPrefix')]"
 					},
 					"nodeFirstAddrOctet4": {
 						"value": "[variables('devFirstAddrOctet4')]"

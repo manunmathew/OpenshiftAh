@@ -281,7 +281,7 @@
 		"masterSubnetPrefix": {
 			"type": "string",
 			"metadata": {
-				"description": "CIDR used for the master subnet - needs to be a subset of the addressPrefix - default is 10.1.0.0/16"
+				"description": "CIDR used for the master subnet"
 			}
 		},
 		"infraSubnetName": {
@@ -293,7 +293,7 @@
 		"infraSubnetPrefix": {
 			"type": "string",
 			"metadata": {
-				"description": "CIDR used for the infra subnet - needs to be a subset of the addressPrefix - default is 10.2.0.0/16"
+				"description": "CIDR used for the infra subnet"
 			}
 		},
 		"cnsSubnetName": {
@@ -305,7 +305,25 @@
 		"cnsSubnetPrefix": {
 			"type": "string",
 			"metadata": {
-				"description": "CIDR used for the cns subnet - needs to be a subset of the addressPrefix - default is 10.3.0.0/16"
+				"description": "CIDR used for the cns subnet"
+			}
+		},
+		"toolsSubnetPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "CIDR used for the tools subnet"
+			}
+		},
+		"prodtestSubnetPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "CIDR used for the prod / test subnet"
+			}
+		},
+		"accdevSubnetPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "CIDR used for the acc / dev subnet"
 			}
 		},
 		"masterInstanceCount": {
@@ -381,33 +399,91 @@
 			"location": "[parameters('location')]",
 			"tags": "[parameters('customTags')]",
 			"properties": {
-				"securityRules": [{
-					"name": "allowSSHin_all",
-					"properties": {
-						"description": "Allow SSH in from all locations",
-						"protocol": "Tcp",
-						"sourcePortRange": "*",
-						"destinationPortRange": "22",
-						"sourceAddressPrefix": "*",
-						"destinationAddressPrefix": "*",
-						"access": "Allow",
-						"priority": 100,
-						"direction": "Inbound"
-					}
-				}, {
-					"name": "allowHTTPS_all",
-					"properties": {
-						"description": "Allow HTTPS connections from all locations",
-						"protocol": "Tcp",
-						"sourcePortRange": "*",
-						"destinationPortRange": "443",
-						"sourceAddressPrefix": "*",
-						"destinationAddressPrefix": "*",
-						"access": "Allow",
-						"priority": 200,
-						"direction": "Inbound"
-					}
-				}]
+				"securityRules": [
+                    {
+                        "name": "Allow-Step1-To-Oscm-TCP-22",
+                        "properties": {
+                            "description": "Allow SSH in from StepStoneSubnet1",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefixes":[
+                                "10.232.0.32/27",
+                                "10.236.0.32/27"
+                            ], 
+                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-Sbhs-To-Oscm-HTTPS-443",
+                        "properties": {
+                            "description": "Allow-SouthF5-To-OpenShiftMasterNodes-HTTPS-443",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefixes": [
+                                "10.232.124.176/28",
+                                "10.236.124.176/28"
+                            ],
+                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1001,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-OpenShiftCoreNodes-To-OpenShiftMasterNodes-All-All",
+                        "properties": {
+                            "description": "Allow-OpenShiftCoreNodes-To-OpenShiftMasterNodes-All-All",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefixes": [
+                                "[parameters('masterSubnetPrefix')]",
+                                "[parameters('infraSubnetPrefix')]",
+                                "[parameters('cnsSubnetPrefix')]"
+                            ],
+                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1002,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-OpenShiftAppNodes-To-OpenShiftMasterNodes-All-All",
+                        "properties": {
+                            "description": "Allow-OpenShiftAppNodes-To-OpenShiftMasterNodes-All-All",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefixes": [
+                                "[parameters('toolsSubnetPrefix')]",
+                                "[parameters('prodtestSubnetPrefix')]",
+                                "[parameters('accdevSubnetPrefix')]"
+                            ],
+                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1003,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Deny-Any-To-Any",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 4096,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
 			}
 		}, {
 			"apiVersion": "[parameters('apiVersionNetwork')]",
@@ -416,46 +492,91 @@
 			"location": "[parameters('location')]",
 			"tags": "[parameters('customTags')]",
 			"properties": {
-				"securityRules": [{
-					"name": "allowSSHin_all",
-					"properties": {
-						"description": "Allow SSH in from all locations",
-						"protocol": "Tcp",
-						"sourcePortRange": "*",
-						"destinationPortRange": "22",
-						"sourceAddressPrefix": "*",
-						"destinationAddressPrefix": "*",
-						"access": "Allow",
-						"priority": 100,
-						"direction": "Inbound"
-					}
-				}, {
-					"name": "allowHTTPSIn_all",
-					"properties": {
-						"description": "Allow HTTPS connections from all locations",
-						"protocol": "Tcp",
-						"sourcePortRange": "*",
-						"destinationPortRange": "443",
-						"sourceAddressPrefix": "*",
-						"destinationAddressPrefix": "*",
-						"access": "Allow",
-						"priority": 200,
-						"direction": "Inbound"
-					}
-				}, {
-					"name": "allowHTTPIn_all",
-					"properties": {
-						"description": "Allow HTTP connections from all locations",
-						"protocol": "Tcp",
-						"sourcePortRange": "*",
-						"destinationPortRange": "80",
-						"sourceAddressPrefix": "*",
-						"destinationAddressPrefix": "*",
-						"access": "Allow",
-						"priority": 300,
-						"direction": "Inbound"
-					}
-				}]
+				"securityRules": [
+                    {
+                        "name": "Allow-Sbhs-To-Osci-HTTPS-443",
+                        "properties": {
+                            "description": "Allow-SouthF5-To-OpenShiftInfraNodes-HTTPS-443",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefixes": [
+                                "10.232.124.176/28",
+                                "10.236.124.176/28"
+                            ],
+                            "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-Nbhs-To-Osci-HTTPS-443",
+                        "properties": {
+                            "description": "Allow-NorthF5-To-OpenShiftInfraNodes-HTTPS-443",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefixes": [
+                                "10.232.123.64/28",
+                                "10.236.123.64/28"
+                            ],
+                            "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1001,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-OpenShiftCoreNodes-To-OpenShiftInfraNodes-All-All",
+                        "properties": {
+                            "description": "Allow-OpenShiftCoreNodes-To-OpenShiftInfraNodes-All-All",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefixes": [
+                                "[parameters('masterSubnetPrefix')]",
+                                "[parameters('infraSubnetPrefix')]",
+                                "[parameters('cnsSubnetPrefix')]"
+                            ],
+                            "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1002,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-OpenShiftApplicationNodes-To-OpenShiftInfraNodes-All-All",
+                        "properties": {
+                            "description": "Allow-OpenShiftApplicationNodes-To-OpenShiftInfraNodes-All-All",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefixes": [
+                                "[parameters('toolsSubnetPrefix')]",
+                                "[parameters('prodtestSubnetPrefix')]",
+                                "[parameters('accdevSubnetPrefix')]"
+                            ],
+                            "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1003,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Deny-Any-To-Any",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 4096,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
 			}
 		}, {
 			"apiVersion": "[parameters('apiVersionNetwork')]",
@@ -464,20 +585,57 @@
 			"location": "[parameters('location')]",
 			"tags": "[parameters('customTags')]",
 			"properties": {
-				"securityRules": [{
-					"name": "allowSSHin_all",
-					"properties": {
-						"description": "Allow SSH in from all locations",
-						"protocol": "Tcp",
-						"sourcePortRange": "*",
-						"destinationPortRange": "22",
-						"sourceAddressPrefix": "*",
-						"destinationAddressPrefix": "*",
-						"access": "Allow",
-						"priority": 100,
-						"direction": "Inbound"
-					}
-				}]
+				"securityRules": [
+                    {
+                        "name": "Allow-OpenShiftCoreNodes-To-OpenShiftCNSNodes-All-All",
+                        "properties": {
+                            "description": "Allow-OpenShiftCoreNodes-To-OpenShiftCNSNodes-All-All",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefixes": [
+                                "[parameters('masterSubnetPrefix')]",
+                                "[parameters('infraSubnetPrefix')]",
+                                "[parameters('cnsSubnetPrefix')]"
+                            ],
+                            "destinationAddressPrefix": "[parameters('cnsSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-OpenShiftApplicationNodes-To-OpenShiftCNSNodes-All-All",
+                        "properties": {
+                            "description": "Allow-OpenShiftApplicationNodes-To-OpenShiftCNSNodes-All-All",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefixes": [
+                                "[parameters('toolsSubnetPrefix')]",
+                                "[parameters('prodtestSubnetPrefix')]",
+                                "[parameters('accdevSubnetPrefix')]"
+                            ],
+                            "destinationAddressPrefix": "[parameters('cnsSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1001,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Deny-Any-To-Any",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 4096,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
 			}
 		}, {
 			"name": "CreateMasterSubnet",

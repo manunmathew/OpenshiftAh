@@ -371,6 +371,12 @@ openshift_hosted_registry_storage_azure_blob_realm=$DOCKERREGISTRYREALM
 # Deploy Service Catalog
 openshift_enable_service_catalog=false
 
+# Specify CNS images
+openshift_storage_glusterfs_image=registry.access.redhat.com/rhgs3/rhgs-server-rhel7:v3.11
+openshift_storage_glusterfs_block_image=registry.access.redhat.com/rhgs3/rhgs-gluster-block-prov-rhel7:v3.11
+openshift_storage_glusterfs_s3_image=registry.access.redhat.com/rhgs3/rhgs-s3-server-rhel7:v3.11
+openshift_storage_glusterfs_heketi_image=registry.access.redhat.com/rhgs3/rhgs-volmanager-rhel7:v3.11
+
 # Type of clustering being used by OCP
 $HAMODE
 

@@ -600,9 +600,9 @@ else
 fi
 
 # Configure OMS Agent Daemonset
-if [ -n "$WSID" || $WSID == "" ]
-then
-
+#if [ -n "$WSID" || $WSID == "" ]
+#then
+echo $(date) " - WSID is: $WSID"
 echo $(date) " - Configuring OMS Agent Daemonset"
 
 runuser -l $SUDOUSER -c "oc adm new-project omslogging --node-selector=\"\""
@@ -688,7 +688,7 @@ runuser -l $SUDOUSER -c "oc create -f /home/$SUDOUSER/openshift-container-platfo
 # Finished creating OMS Agent daemonset
 echo $(date) " - OMS Agent daemonset created"
 
-fi
+#fi
 
 # Delete yaml files
 echo $(date) " - Deleting unecessary files"

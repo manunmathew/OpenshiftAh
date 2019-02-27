@@ -589,7 +589,7 @@
                             "sourceAddressPrefixes": [
                                 "168.63.129.16"
                             ],
-                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
+                            "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
                             "access": "Allow",
                             "priority": 1004,
                             "direction": "Inbound"
@@ -605,7 +605,7 @@
                             "sourceAddressPrefixes": [
                                 "168.63.129.16"
                             ],
-                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
+                            "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
                             "access": "Allow",
                             "priority": 1005,
                             "direction": "Inbound"

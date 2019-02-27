@@ -745,7 +745,6 @@
 		"bastionPublicIpDnsLabel": "[concat('bastiondns', uniqueString(resourceGroup().id))]",
 		"infraLbPublicIpDnsLabel": "[concat('infradns', uniqueString(concat(resourceGroup().id, 'infra')))]",
 		"openshiftMasterPublicIpDnsLabel": "[concat('masterdns', uniqueString(concat(resourceGroup().id, 'master')))]",
-		"persistentVolume1Type": "Standard_LRS",
 
 		"masterLoadBalancerName": "[concat(parameters('openshiftClusterPrefix'), '-Prd-Lb-Oscm-01')]",
 		"masterPublicIpAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('openshiftMasterPublicIpDnsLabel'))]",

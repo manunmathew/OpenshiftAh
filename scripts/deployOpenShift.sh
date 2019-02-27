@@ -600,9 +600,9 @@ else
 fi
 
 # Configure OMS Agent Daemonset
-#if [ -n "$WSID" || $WSID != "" ]
-#then
-echo $(date) " - WSID is: $WSID"
+# if [ -n "$WSID" || $WSID != "" ]
+# then
+
 echo $(date) " - Configuring OMS Agent Daemonset"
 
 export WSIDBASE64=$(echo $WSID | base64 | tr -d '\n')

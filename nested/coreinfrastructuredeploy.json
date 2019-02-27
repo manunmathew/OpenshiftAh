@@ -471,6 +471,22 @@
                         }
                     },
                     {
+                        "name": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-443",
+                        "properties": {
+                            "description": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-443",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefixes": [
+                                "168.63.129.16"
+                            ],
+                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1004,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
                         "name": "Deny-Any-To-Any",
                         "properties": {
                             "protocol": "*",
@@ -560,6 +576,38 @@
                             "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
                             "access": "Allow",
                             "priority": 1003,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-443",
+                        "properties": {
+                            "description": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-443",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefixes": [
+                                "168.63.129.16"
+                            ],
+                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1004,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-80",
+                        "properties": {
+                            "description": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-80",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "80",
+                            "sourceAddressPrefixes": [
+                                "168.63.129.16"
+                            ],
+                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
+                            "access": "Allow",
+                            "priority": 1005,
                             "direction": "Inbound"
                         }
                     },

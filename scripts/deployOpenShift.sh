@@ -600,16 +600,10 @@ else
 fi
 
 # Configure OMS Agent Daemonset
-#if [ -n "$WSID" || $WSID == "" ]
+#if [ -n "$WSID" || $WSID != "" ]
 #then
 echo $(date) " - WSID is: $WSID"
 echo $(date) " - Configuring OMS Agent Daemonset"
-
-runuser -l $SUDOUSER -c "oc adm new-project omslogging --node-selector=\"\""
-runuser -l $SUDOUSER -c "oc project omslogging"
-runuser -l $SUDOUSER -c "oc create serviceaccount omsagent"
-runuser -l $SUDOUSER -c "oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:omslogging:omsagent"
-runuser -l $SUDOUSER -c "oc adm policy add-scc-to-user privileged system:serviceaccount:omslogging:omsagent"
 
 export WSIDBASE64=$(echo $WSID | base64 | tr -d '\n')
 export WSKEYBASE64=$(echo $WSKEY | base64 | tr -d '\n')
@@ -682,8 +676,14 @@ spec:
           path: /var/lib/docker/containers
 EOF
 
-runuser -l $SUDOUSER -c "oc create -f /home/$SUDOUSER/openshift-container-platform-playbooks/oms-secret.yaml"
-runuser -l $SUDOUSER -c "oc create -f /home/$SUDOUSER/openshift-container-platform-playbooks/oms-agent.yaml"
+oc adm new-project omslogging --node-selector=''
+oc project omslogging
+oc create serviceaccount omsagent
+oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:omslogging:omsagent
+oc adm policy add-scc-to-user privileged system:serviceaccount:omslogging:omsagent
+
+oc create -f /home/$SUDOUSER/openshift-container-platform-playbooks/oms-secret.yaml
+oc create -f /home/$SUDOUSER/openshift-container-platform-playbooks/oms-agent.yaml
 
 # Finished creating OMS Agent daemonset
 echo $(date) " - OMS Agent daemonset created"

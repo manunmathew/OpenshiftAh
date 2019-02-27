@@ -45,6 +45,8 @@ export ACCDEVCOUNT="${38}"
 export DOMAIN="${39}"
 export HOSTSUFFIX=${40}
 export CLUSTERTYPE=${41}
+export WSID=${42}
+export WSKEY=${43}
 
 export BASTION=$(hostname)
 
@@ -597,6 +599,97 @@ else
 	echo $(date) " - Failed to add Azure AD authentication configuration to master-config.yaml"
 fi
 
+# Configure OMS Agent Daemonset
+if [ -n "$WSID" || $WSID == "" ]
+then
+
+echo $(date) " - Configuring OMS Agent Daemonset"
+
+runuser -l $SUDOUSER -c "oc adm new-project omslogging --node-selector=\"\""
+runuser -l $SUDOUSER -c "oc project omslogging"
+runuser -l $SUDOUSER -c "oc create serviceaccount omsagent"
+runuser -l $SUDOUSER -c "oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:omslogging:omsagent"
+runuser -l $SUDOUSER -c "oc adm policy add-scc-to-user privileged system:serviceaccount:omslogging:omsagent"
+
+export WSIDBASE64=$(echo $WSID | base64 | tr -d '\n')
+export WSKEYBASE64=$(echo $WSKEY | base64 | tr -d '\n')
+
+# Create oms secret yaml
+cat > /home/$SUDOUSER/openshift-container-platform-playbooks/oms-secret.yaml <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: omsagent-secret
+data:
+  WSID: $WSIDBASE64
+  KEY: $WSKEYBASE64
+EOF
+
+# Create daemonset yaml
+cat > /home/$SUDOUSER/openshift-container-platform-playbooks/oms-agent.yaml <<EOF
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: oms
+spec:
+  selector:
+    matchLabels:
+      name: omsagent
+  template:
+    metadata:
+      labels:
+        name: omsagent
+        agentVersion: 1.8.1-256
+        dockerProviderVersion: 1.0.0-35
+    spec:
+      serviceAccount: omsagent
+      containers:
+      - image: "microsoft/oms"
+        imagePullPolicy: Always
+        name: omsagent
+        securityContext:
+          privileged: true
+        ports:
+        - containerPort: 25225
+          protocol: TCP
+        - containerPort: 25224
+          protocol: UDP
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+        - mountPath: /etc/omsagent-secret
+          name: omsagent-secret
+          readOnly: true
+        - mountPath: /var/lib/docker/containers 
+          name: containerlog-path
+        livenessProbe:
+          exec:
+            command:
+              - /bin/bash
+              - -c
+              - ps -ef | grep omsagent | grep -v "grep"
+          initialDelaySeconds: 60
+          periodSeconds: 60
+      volumes:
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+      - name: omsagent-secret
+        secret:
+          secretName: omsagent-secret
+      - name: containerlog-path
+        hostPath:
+          path: /var/lib/docker/containers
+EOF
+
+runuser -l $SUDOUSER -c "oc create -f /home/$SUDOUSER/openshift-container-platform-playbooks/oms-secret.yaml"
+runuser -l $SUDOUSER -c "oc create -f /home/$SUDOUSER/openshift-container-platform-playbooks/oms-agent.yaml"
+
+# Finished creating OMS Agent daemonset
+echo $(date) " - OMS Agent daemonset created"
+
+fi
+
 # Delete yaml files
 echo $(date) " - Deleting unecessary files"
 rm -rf /home/${SUDOUSER}/openshift-container-platform-playbooks
@@ -605,7 +698,7 @@ rm -rf /home/${SUDOUSER}/openshift-container-platform-playbooks
 echo $(date) " - Delete pem files"
 rm -rf /tmp/*.pem
 
-echo $(date) " - Sleep for 15"
+echo $(date) " - Sleep for 15 seconds"
 sleep 15
 
 echo $(date) " - Script complete"

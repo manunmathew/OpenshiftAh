@@ -2849,6 +2849,22 @@
 					"masterCertType": {
 						"value": "[parameters('masterCertType')]"
 					},
+					"omsWorkspaceId": {
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "omsWorkspaceId"
+						}
+					},
+					"omsWorkspaceKey": {
+						"reference": {
+							"keyvault": {
+								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+							},
+							"secretName": "omsWorkspaceKey"
+						}
+					},
 					"clusterType": {
 						"value": "prodacc"
 					}

@@ -82,7 +82,8 @@ subscription-manager repos \
     --enable="rhel-7-server-ose-3.11-rpms" \
     --enable="rhel-7-server-ansible-2.6-rpms" \
     --enable="rhel-7-fast-datapath-rpms" \
-    --enable="rh-gluster-3-client-for-rhel-7-server-rpms"
+    --enable="rh-gluster-3-client-for-rhel-7-server-rpms" \
+    --enable="rhel-7-server-optional-rpms"
 
 # Update system to latest packages
 echo $(date) " - Update system to latest packages"
@@ -95,6 +96,7 @@ echo $(date) " - Install base packages"
 yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion httpd-tools kexec-tools sos psacct
 yum -y install ansible
 yum -y update glusterfs-fuse
+yum -y install pcsc-lite-devel
 echo $(date) " - Base package installation complete"
 
 # Install OpenShift utilities

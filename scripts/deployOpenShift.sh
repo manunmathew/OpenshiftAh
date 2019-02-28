@@ -503,6 +503,7 @@ runuser $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-play
 # Installing Service Catalog, Ansible Service Broker and Template Service Broker
 if [[ $AZURE == "true" || $ENABLECNS == "true" ]]
 then
+	echo $(date) " - Installing Service Catalog, Ansible service broker, and template service broker."
     runuser -l $SUDOUSER -c "ansible-playbook -e openshift_enable_service_catalog=true -f 30 /usr/share/ansible/openshift-ansible/playbooks/openshift-service-catalog/config.yml"
 fi
 
@@ -547,21 +548,6 @@ then
     fi
 fi
 
-# Creating variables file for private master configuration playbook
-echo $(date) " - Creating variables file for future playbooks"
-cat > /home/$SUDOUSER/openshift-container-platform-playbooks/vars.yaml <<EOF
-admin_user: $SUDOUSER
-master_lb_private_dns: $PRIVATEDNS
-domain: $DOMAIN
-EOF
-
-# Configure cluster for private masters
-if [[ $MASTERCLUSTERTYPE == "private" ]]
-then
-	echo $(date) " - Configure cluster for private masters"
-	runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/activate-private-lb-fqdn.31x.yaml"
-fi
-
 # Creating variables file for Azure AD configuration playbook
 echo $(date) " - Creating variables file for future playbooks"
 cat > /home/$SUDOUSER/openshift-container-platform-playbooks/aad.yaml <<EOF
@@ -589,7 +575,7 @@ cat > /home/$SUDOUSER/openshift-container-platform-playbooks/aad.yaml <<EOF
 EOF
 
 # Configure for Azure AD Authentication
-echo $(date) " - Configure cluster for private masters"
+echo $(date) " - Configure cluster for Azure AD Authentication"
 runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/add-azuread-auth.yaml -e @~/openshift-container-platform-playbooks/vars.yaml"
 
 if [ $? -eq 0 ]
@@ -676,6 +662,7 @@ spec:
           path: /var/lib/docker/containers
 EOF
 
+echo $(date) " - Creating omslogging project, service account and setting proper policies.  Create secret and daemonset."
 oc adm new-project omslogging --node-selector=''
 oc project omslogging
 oc create serviceaccount omsagent
@@ -689,6 +676,21 @@ oc create -f /home/$SUDOUSER/openshift-container-platform-playbooks/oms-agent.ya
 echo $(date) " - OMS Agent daemonset created"
 
 #fi
+
+# Creating variables file for private master configuration playbook
+echo $(date) " - Creating variables file for future playbooks"
+cat > /home/$SUDOUSER/openshift-container-platform-playbooks/vars.yaml <<EOF
+admin_user: $SUDOUSER
+master_lb_private_dns: $PRIVATEDNS
+domain: $DOMAIN
+EOF
+
+# Configure cluster for private masters
+if [[ $MASTERCLUSTERTYPE == "private" ]]
+then
+	echo $(date) " - Configure cluster for private masters"
+	runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/activate-private-lb-fqdn.31x.yaml"
+fi
 
 # Delete yaml files
 echo $(date) " - Deleting unecessary files"

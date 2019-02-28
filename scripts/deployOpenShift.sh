@@ -328,6 +328,7 @@ ansible_ssh_user=$SUDOUSER
 ansible_become=yes
 openshift_install_examples=true
 openshift_deployment_type=openshift-enterprise
+deployment_type=openshift-enterprise
 openshift_release=v3.11
 openshift_image_tag=v3.11.69
 openshift_pkg_version=-3.11.69

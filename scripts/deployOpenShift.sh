@@ -548,7 +548,7 @@ then
     fi
 fi
 
-# Creating variables file for private master configuration playbook
+# Creating variables file for private master and Azure AD configuration playbook
 echo $(date) " - Creating variables file for future playbooks"
 cat > /home/$SUDOUSER/openshift-container-platform-playbooks/vars.yaml <<EOF
 admin_user: $SUDOUSER
@@ -556,8 +556,8 @@ master_lb_private_dns: $PRIVATEDNS
 domain: $DOMAIN
 EOF
 
-# Creating variables file for Azure AD configuration playbook
-echo $(date) " - Creating variables file for future playbooks"
+# Creating file for Azure AD configuration playbook
+echo $(date) " - Creating Azure AD configuration playbook"
 cat > /home/$SUDOUSER/openshift-container-platform-playbooks/aad.yaml <<EOF
   - name: AzureAD
     challenge: false

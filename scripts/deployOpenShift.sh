@@ -548,6 +548,14 @@ then
     fi
 fi
 
+# Creating variables file for private master configuration playbook
+echo $(date) " - Creating variables file for future playbooks"
+cat > /home/$SUDOUSER/openshift-container-platform-playbooks/vars.yaml <<EOF
+admin_user: $SUDOUSER
+master_lb_private_dns: $PRIVATEDNS
+domain: $DOMAIN
+EOF
+
 # Creating variables file for Azure AD configuration playbook
 echo $(date) " - Creating variables file for future playbooks"
 cat > /home/$SUDOUSER/openshift-container-platform-playbooks/aad.yaml <<EOF
@@ -675,15 +683,12 @@ oc create -f /home/$SUDOUSER/openshift-container-platform-playbooks/oms-agent.ya
 # Finished creating OMS Agent daemonset
 echo $(date) " - OMS Agent daemonset created"
 
-#fi
+# Disable self-provisioning of projects
+echo $(date) " - Disable self-provisioning of projects."
+oc patch clusterrolebinding.rbac self-provisioners -p '{"subjects": null}'
+oc  describe clusterrolebinding.rbac self-provisioners
 
-# Creating variables file for private master configuration playbook
-echo $(date) " - Creating variables file for future playbooks"
-cat > /home/$SUDOUSER/openshift-container-platform-playbooks/vars.yaml <<EOF
-admin_user: $SUDOUSER
-master_lb_private_dns: $PRIVATEDNS
-domain: $DOMAIN
-EOF
+#fi
 
 # Configure cluster for private masters
 if [[ $MASTERCLUSTERTYPE == "private" ]]

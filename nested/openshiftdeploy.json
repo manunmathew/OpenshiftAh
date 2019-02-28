@@ -285,13 +285,13 @@
 			}
 		},
 		"omsWorkspaceId": {
-			"type": "customstring",
+			"type": "securestring",
 			"metadata": {
 				"description": "OMS Workspace ID"
 			}
 		},
 		"omsWorkspaceKey": {
-			"type": "customstring",
+			"type": "securestring",
 			"metadata": {
 				"description": "OMS Workspace Key"
 			}

@@ -692,6 +692,7 @@ fi
 sleep 15
 echo $(date) " - Disable self-provisioning of projects."
 oc patch clusterrolebinding.rbac self-provisioners -p '{"subjects": null}'
+oc patch clusterrolebinding.rbac self-provisioners -p '{ "metadata": { "annotations": { "rbac.authorization.kubernetes.io/autoupdate": "false" } } }'
 oc  describe clusterrolebinding.rbac self-provisioners
 
 # Create custom project request message

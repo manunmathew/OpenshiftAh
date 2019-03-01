@@ -103,7 +103,7 @@ echo $(date) " - Base package installation complete"
 # Install OpenShift utilities
 echo $(date) " - Installing OpenShift utilities"
 
-yum -y install openshift-ansible-3.11.${MINORVERSION}
+yum -y install openshift-ansible-${MINORVERSION}
 echo $(date) " - OpenShift utilities installation complete"
 
 # Installing Azure CLI

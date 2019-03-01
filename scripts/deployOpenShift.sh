@@ -597,9 +597,10 @@ else
 fi
 
 # Configure OMS Agent Daemonset
-if [ -n "$WSID" || $WSID != "" ]
+if [[ -n "$WSID" || $WSID != "" ]]
 then
 
+sleep 15
 echo $(date) " - Configuring OMS Agent Daemonset"
 
 export WSIDBASE64=$(echo $WSID | base64 | tr -d '\n')
@@ -689,6 +690,7 @@ echo $(date) " - OMS Agent daemonset created"
 fi
 
 # Disable self-provisioning of projects
+sleep 15
 echo $(date) " - Disable self-provisioning of projects."
 oc patch clusterrolebinding.rbac self-provisioners -p '{"subjects": null}'
 oc  describe clusterrolebinding.rbac self-provisioners

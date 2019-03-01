@@ -15,6 +15,7 @@ export CUSTOMMASTERCAFILE="${11}"
 export CUSTOMMASTERCERTFILE="${12}"
 export CUSTOMMASTERKEYFILE="${13}"
 export DOMAIN="${14}"
+export MINORVERSION=${15}
 
 # Generate private keys for use by Ansible
 echo $(date) " - Generating Private keys for use by Ansible for OpenShift Installation"
@@ -102,7 +103,7 @@ echo $(date) " - Base package installation complete"
 # Install OpenShift utilities
 echo $(date) " - Installing OpenShift utilities"
 
-yum -y install openshift-ansible-3.11.69
+yum -y install openshift-ansible-3.11.${MINORVERSION}
 echo $(date) " - OpenShift utilities installation complete"
 
 # Installing Azure CLI

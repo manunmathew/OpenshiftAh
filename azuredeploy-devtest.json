@@ -189,6 +189,13 @@
 				"description": "OpenShift cluster prefix for compute nodes. Used to generate compute node hostnames. Maximum of 20 characters."
 			}
 		},
+		"minorVersion": {
+			"type": "string",
+			"defaultValue": "69",
+			"metadata": {
+				"description": "Minor version of OpenShift 3.11 to deploy"
+			}
+		},
 		"masterInstanceCount": {
 			"type": "int",
 			"defaultValue": 3,
@@ -671,6 +678,13 @@
 			"defaultValue": "none",
 			"metadata": {
 				"description": "Subscription ID for tools node group components"
+			}
+		},
+		"projectRequestMessage": {
+			"type": "string",
+			"defaultValue": "none",
+			"metadata": {
+				"description": "Custom project request message to be inserted into master-config.yaml on all masters"
 			}
 		}
 	},
@@ -2343,6 +2357,9 @@
 							"secretName": "[if(equals(parameters('masterCertType'),'custom'), 'devtestmasterkeyfile', 'sshPrivateKey')]"
 						}
 					},
+					"minorVersion": {
+						"value": "[parameters('minorVersion')]"
+					},
 					"customTags": {
 						"value": "[parameters('coreInfraCustomTags')]"
 					}
@@ -2864,6 +2881,12 @@
 							},
 							"secretName": "omsWorkspaceKey"
 						}
+					},
+					"projectRequestMessage": {
+						"value": "[parameters('projectRequestMessage')]"
+					},
+					"minorVersion": {
+						"value": "[parameters('minorVersion')]"
 					},
 					"clusterType": {
 						"value": "devtest"

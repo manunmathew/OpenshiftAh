@@ -45,8 +45,10 @@ export ACCDEVCOUNT="${38}"
 export DOMAIN="${39}"
 export HOSTSUFFIX=${40}
 export CLUSTERTYPE=${41}
-export WSID=${42}
-export WSKEY=${43}
+export MINORVERSION=${42}
+export PROJREQMSG="${43}"
+export WSID=${44}
+export WSKEY=${45}
 
 export BASTION=$(hostname)
 
@@ -330,8 +332,8 @@ openshift_install_examples=true
 openshift_deployment_type=openshift-enterprise
 deployment_type=openshift-enterprise
 openshift_release=v3.11
-openshift_image_tag=v3.11.69
-openshift_pkg_version=-3.11.69
+openshift_image_tag=v3.11.${MINORVERSION}
+openshift_pkg_version=-3.11.${MINORVERSION}
 docker_udev_workaround=True
 openshift_use_dnsmasq=true
 openshift_master_default_subdomain=$ROUTING
@@ -595,8 +597,8 @@ else
 fi
 
 # Configure OMS Agent Daemonset
-# if [ -n "$WSID" || $WSID != "" ]
-# then
+if [ -n "$WSID" || $WSID != "" ]
+then
 
 echo $(date) " - Configuring OMS Agent Daemonset"
 
@@ -684,12 +686,21 @@ oc create -f /home/$SUDOUSER/openshift-container-platform-playbooks/oms-agent.ya
 # Finished creating OMS Agent daemonset
 echo $(date) " - OMS Agent daemonset created"
 
+fi
+
 # Disable self-provisioning of projects
 echo $(date) " - Disable self-provisioning of projects."
 oc patch clusterrolebinding.rbac self-provisioners -p '{"subjects": null}'
 oc  describe clusterrolebinding.rbac self-provisioners
 
-#fi
+# Create custom project request message
+echo $(date) " - Create custom project request message"
+cat > /home/$SUDOUSER/openshift-container-platform-playbooks/projectreqmsg.yaml <<EOF
+projectRequestMessage: '${PROJREQMSG}
+EOF
+
+runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/add-project-request-message.yaml -e @~/openshift-container-platform-playbooks/vars.yaml"
+echo $(date) " - Custom project request message created"
 
 # Configure cluster for private masters
 if [[ $MASTERCLUSTERTYPE == "private" ]]

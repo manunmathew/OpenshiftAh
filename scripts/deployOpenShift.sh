@@ -156,8 +156,7 @@ echo $(date) " - Create variable for master cluster address based on cluster typ
 if [[ $MASTERCLUSTERTYPE == "private" ]]
 then
 	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=${MASTER}${HOSTSUFFIX}1
-openshift_master_cluster_public_hostname=$PRIVATEDNS
-openshift_master_cluster_public_vip=$PRIVATEIP"
+openshift_master_cluster_public_hostname=$PRIVATEDNS"
 else
 	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
 openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME

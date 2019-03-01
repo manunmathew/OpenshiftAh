@@ -471,22 +471,6 @@
                         }
                     },
                     {
-                        "name": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-443",
-                        "properties": {
-                            "description": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-443",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "443",
-                            "sourceAddressPrefixes": [
-                                "168.63.129.16"
-                            ],
-                            "destinationAddressPrefix": "[parameters('masterSubnetPrefix')]",
-                            "access": "Allow",
-                            "priority": 1004,
-                            "direction": "Inbound"
-                        }
-                    },
-                    {
                         "name": "Deny-Any-To-Any",
                         "properties": {
                             "protocol": "*",
@@ -576,38 +560,6 @@
                             "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
                             "access": "Allow",
                             "priority": 1003,
-                            "direction": "Inbound"
-                        }
-                    },
-                    {
-                        "name": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-443",
-                        "properties": {
-                            "description": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-443",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "443",
-                            "sourceAddressPrefixes": [
-                                "168.63.129.16"
-                            ],
-                            "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
-                            "access": "Allow",
-                            "priority": 1004,
-                            "direction": "Inbound"
-                        }
-                    },
-                    {
-                        "name": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-80",
-                        "properties": {
-                            "description": "Allow-AzureLoadBalancer-To-OpenShiftMasterNodes-HTTPS-80",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "80",
-                            "sourceAddressPrefixes": [
-                                "168.63.129.16"
-                            ],
-                            "destinationAddressPrefix": "[parameters('infraSubnetPrefix')]",
-                            "access": "Allow",
-                            "priority": 1005,
                             "direction": "Inbound"
                         }
                     },
@@ -810,6 +762,7 @@
 				"count": "[length(parameters('availabilitySetArray'))]"
 			}
 		}, {
+			"condition": false,
 			"type": "Microsoft.Network/loadBalancers",
 			"name": "[parameters('masterLoadBalancerName')]",
 			"location": "[parameters('location')]",
@@ -857,6 +810,7 @@
 				}]
 			}
 		}, {
+			"condition": false,
 			"type": "Microsoft.Network/loadBalancers",
 			"name": "[parameters('infraLoadBalancerName')]",
 			"location": "[parameters('location')]",
@@ -995,7 +949,6 @@
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"tags": "[parameters('customTags')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/loadBalancers/', parameters('masterLoadBalancerName'))]",
 				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Oscm-', parameters('nameSuffix'))]",
 				"CreateMasterSubnet"
 			],
@@ -1011,10 +964,7 @@
 						"privateIPAddress": "[concat(parameters('masterFirstAddrPrefix'), copyindex(parameters('masterFirstAddrOctet4')))]",
 						"subnet": {
 							"id": "[resourceId(parameters('coreInfraVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('coreInfraVirtualNetworkName'), parameters('masterSubnetName'))]"
-						},
-						"loadBalancerBackendAddressPools": [{
-							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', parameters('masterLoadBalancerName'), '/backendAddressPools/loadBalancerBackEnd')]"
-						}]
+						}
 					}
 				}],
 				"enableAcceleratedNetworking": "[parameters('enableMasterAcceleratedNetworking')]"
@@ -1026,7 +976,6 @@
 			"apiVersion": "[parameters('apiVersionNetwork')]",
 			"tags": "[parameters('customTags')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/loadBalancers/', parameters('infraLoadBalancerName'))]",
 				"[concat('Microsoft.Network/networkSecurityGroups/', parameters('openshiftClusterPrefix'), '-Nsg-Osci-', parameters('nameSuffix'))]",
 				"CreateInfraSubnet"
 			],
@@ -1042,10 +991,7 @@
 						"privateIPAddress": "[concat(parameters('infraFirstAddrPrefix'), copyindex(parameters('infraFirstAddrOctet4')))]",
 						"subnet": {
 							"id": "[resourceId(parameters('coreInfraVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('coreInfraVirtualNetworkName'), parameters('infraSubnetName'))]"
-						},
-						"loadBalancerBackendAddressPools": [{
-							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', parameters('infraLoadBalancerName'), '/backendAddressPools/loadBalancerBackEnd')]"
-						}]
+						}
 					}
 				}],
 				"enableAcceleratedNetworking": "[parameters('enableInfraAcceleratedNetworking')]"

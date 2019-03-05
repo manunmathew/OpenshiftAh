@@ -98,8 +98,8 @@ openshift_cloudprovider_azure_vnet_name=$VNETNAME
 openshift_cloudprovider_azure_security_group_name=$NODENSG
 openshift_cloudprovider_azure_availability_set_name=$NODEAVAILIBILITYSET
 openshift_cloudprovider_azure_resource_group=$RESOURCEGROUP
-openshift_cloudprovider_azure_location=$LOCATION"
-	# CNS_DEFAULT_STORAGE=false
+openshift_cloudprovider_azure_location=$LOCATION
+openshift_storageclass_default=false"
 	if [[ $STORAGEKIND == "managed" ]]
 	then
 		SCKIND="openshift_storageclass_parameters={'kind': 'managed', 'storageaccounttype': 'Premium_LRS'}"

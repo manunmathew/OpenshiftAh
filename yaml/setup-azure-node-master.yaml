@@ -1,0 +1,31 @@
+---
+- hosts: masters
+  serial: 1
+  gather_facts: no
+  become: yes
+  vars:
+    azure_conf_dir: /etc/origin/cloudprovider
+    azure_conf: "{{ azure_conf_dir }}/azure.conf"
+    node_conf: /etc/origin/node/node-config.yaml
+  handlers:
+  - name: restart atomic-openshift-node
+    systemd:
+      state: restarted
+      name: atomic-openshift-node
+  tasks:
+
+  - name: insert the azure disk config into the node
+    modify_yaml:
+      dest: "{{ node_conf }}"
+      yaml_key: "{{ item.key }}"
+      yaml_value: "{{ item.value }}"
+    with_items:
+    - key: kubeletArguments.cloud-config
+      value:
+      - "{{ azure_conf }}"
+
+    - key: kubeletArguments.cloud-provider
+      value:
+      - azure
+    notify:
+    - restart atomic-openshift-node

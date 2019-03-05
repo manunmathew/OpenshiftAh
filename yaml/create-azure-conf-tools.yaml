@@ -1,0 +1,19 @@
+---
+- hosts: tools
+  gather_facts: no
+  become: yes
+  vars:
+    azure_source_conf: tools_azure.conf
+    azure_conf_dir: /etc/origin/cloudprovider
+    azure_conf: "{{ azure_conf_dir }}/azure.conf"
+
+  tasks:
+  - name: make sure {{ azure_conf_dir }} exists
+    file:
+      state: directory
+      path: "{{ azure_conf_dir }}"
+
+  - name: populate {{ azure_conf }}
+    copy:
+      src: "{{ azure_source_conf }}"
+      dest: "{{ azure_conf }}"

@@ -167,9 +167,30 @@ openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
 openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS"
 fi
 
+# Create list variable for each node type
+MASTERLIST="${HOSTSUFFIX}$MASTERCOUNT"
+INFRALIST="${HOSTSUFFIX}$INFRACOUNT"
+if [ $TOOLSCOUNT -gt 9 ]
+then
+	TOOLSLIST="$TOOLSCOUNT"
+else
+	TOOLSLIST="${HOSTSUFFIX}$TOOLSCOUNT"
+fi
+if [ $PRODTESTCOUNT -gt 9 ]
+then
+	PRODTESTLIST="$PRODTESTCOUNT"
+else
+	PRODTESTLIST="${HOSTSUFFIX}$PRODTESTCOUNT"
+fi
+if [ $ACCDEVCOUNT -gt 9 ]
+then
+	ACCDEVLIST="$ACCDEVCOUNT"
+else
+	ACCDEVLIST="${HOSTSUFFIX}$ACCDEVCOUNT"
+fi
+
 # Create Master nodes grouping
 echo $(date) " - Creating Master nodes grouping"
-MASTERLIST="${HOSTSUFFIX}$MASTERCOUNT"
 
 for (( c=1; c<=$MASTERCOUNT; c++ ))
 do
@@ -425,6 +446,18 @@ $MASTER[${HOSTSUFFIX}1:${MASTERLIST}]
 
 [master0]
 ${MASTER}${HOSTSUFFIX}1
+
+[infra]
+$INFRA[${HOSTSUFFIX}1:${INFRALIST}]
+
+[tools]
+$TOOLS[${HOSTSUFFIX}1:${TOOLSLIST}]
+
+[prodtest]
+$PRODTEST[${HOSTSUFFIX}1:${PRODTESTLIST}]
+
+[accdev]
+$ACCDEV[${HOSTSUFFIX}1:${ACCDEVLIST}]
 
 # Only populated when CNS is enabled
 [glusterfs]

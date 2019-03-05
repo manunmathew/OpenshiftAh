@@ -819,10 +819,12 @@
 		"bastionPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/bastionPrep.sh')]",
 		"nodePrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/nodePrep.sh')]",
 		"masterPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/masterPrep.sh')]",
+		"infraPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/infraPrep.sh')]",
 		"openshiftDeploymentScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/deployOpenShift.sh')]",
 		"bastionPrepScriptFileName": "bastionPrep.sh",
 		"nodePrepScriptFileName": "nodePrep.sh",
 		"masterPrepScriptFileName": "masterPrep.sh",
+		"infraPrepScriptFileName": "infraPrep.sh",
 		"openshiftDeploymentScriptFileName": "deployOpenShift.sh",
 		"clusterNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/clusternode.json')]",
 		"clusterCnsNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/clustercnsnode.json')]",
@@ -2449,10 +2451,10 @@
 						"value": "[variables('apiVersionCompute')]"
 					},
 					"nodePrepScriptUrl": {
-						"value": "[variables('nodePrepScriptUrl')]"
+						"value": "[variables('infraPrepScriptUrl')]"
 					},
 					"nodePrepScriptFileName": {
-						"value": "[variables('nodePrepScriptFileName')]"
+						"value": "[variables('infraPrepScriptFileName')]"
 					},
 					"openshiftNodeHostname": {
 						"value": "[concat(variables('openshiftInfraHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"

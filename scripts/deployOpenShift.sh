@@ -98,7 +98,8 @@ openshift_cloudprovider_azure_vnet_name=$VNETNAME
 openshift_cloudprovider_azure_security_group_name=$NODENSG
 openshift_cloudprovider_azure_availability_set_name=$NODEAVAILIBILITYSET
 openshift_cloudprovider_azure_resource_group=$RESOURCEGROUP
-openshift_cloudprovider_azure_location=$LOCATION"
+openshift_cloudprovider_azure_location=$LOCATION
+openshift_storageclass_default=false"
 	# CNS_DEFAULT_STORAGE=false
 	if [[ $STORAGEKIND == "managed" ]]
 	then

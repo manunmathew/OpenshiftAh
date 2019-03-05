@@ -10,6 +10,14 @@
 			},
 			"defaultValue": "https://raw.githubusercontent.com/Microsoft/openshift-container-platform/master"
 		},
+		"bitBucketAccessToken": {
+			"reference": {
+				"keyvault": {
+					"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+				},
+				"secretName": "bitBucketAccessToken"
+			}
+		},
 		"masterVmSize": {
 			"type": "string",
 			"defaultValue": "Standard_E2s_v3",
@@ -816,26 +824,26 @@
 		"bastionVmSize": "Standard_D2s_v3",
 		"singlequote": "'",
 		"sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-		"bastionPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/bastionPrep.sh')]",
-		"nodePrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/nodePrep.sh')]",
-		"masterPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/masterPrep.sh')]",
-		"infraPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/infraPrep.sh')]",
-		"openshiftDeploymentScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/deployOpenShift.sh')]",
+		"bastionPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/bastionPrep.sh?access_token=', parameters('bitBucketAccessToken'))]",
+		"nodePrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/nodePrep.sh?access_token=', parameters('bitBucketAccessToken'))]",
+		"masterPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/masterPrep.sh?access_token=', parameters('bitBucketAccessToken'))]",
+		"infraPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/infraPrep.sh?access_token=', parameters('bitBucketAccessToken'))]",
+		"openshiftDeploymentScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/deployOpenShift.sh?access_token=', parameters('bitBucketAccessToken'))]",
 		"bastionPrepScriptFileName": "bastionPrep.sh",
 		"nodePrepScriptFileName": "nodePrep.sh",
 		"masterPrepScriptFileName": "masterPrep.sh",
 		"infraPrepScriptFileName": "infraPrep.sh",
 		"openshiftDeploymentScriptFileName": "deployOpenShift.sh",
-		"clusterNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/clusternode.json')]",
-		"clusterCnsNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/clustercnsnode.json')]",
-		"basicDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/bastiondeploy.json')]",
-		"openshiftDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/openshiftdeploy.json')]",
-		"coreInfrastructureDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/coreinfrastructuredeploy.json')]",
-		"nodeGroupDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/nodegroupdeploy.json')]",
-		"subnetCreateTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/subnetcreate.json')]",
-		"bastionPrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/bastionprep.json')]",
-		"masterPrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/masterprep.json')]",
-		"nodePrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/nodeprep.json')]",
+		"clusterNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/clusternode.json?access_token=', parameters('bitBucketAccessToken'))]",
+		"clusterCnsNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/clustercnsnode.json?access_token=', parameters('bitBucketAccessToken'))]",
+		"basicDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/bastiondeploy.json?access_token=', parameters('bitBucketAccessToken'))]",
+		"openshiftDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/openshiftdeploy.json?access_token=', parameters('bitBucketAccessToken'))]",
+		"coreInfrastructureDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/coreinfrastructuredeploy.json?access_token=', parameters('bitBucketAccessToken'))]",
+		"nodeGroupDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/nodegroupdeploy.json?access_token=', parameters('bitBucketAccessToken'))]",
+		"subnetCreateTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/subnetcreate.json?access_token=', parameters('bitBucketAccessToken'))]",
+		"bastionPrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/bastionprep.json?access_token=', parameters('bitBucketAccessToken'))]",
+		"masterPrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/masterprep.json?access_token=', parameters('bitBucketAccessToken'))]",
+		"nodePrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/nodeprep.json?access_token=', parameters('bitBucketAccessToken'))]",
 		"deployOpenShift": true,
 		"vmSizesMap": {
 			"Standard_A4": {

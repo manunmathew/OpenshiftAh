@@ -11,12 +11,10 @@
 			"defaultValue": "https://raw.githubusercontent.com/Microsoft/openshift-container-platform/master"
 		},
 		"bitBucketAccessToken": {
-			"reference": {
-				"keyvault": {
-					"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-				},
-				"secretName": "bitBucketAccessToken"
-			}
+			"type": "securestring",
+			"metadata": {
+				"description": "Access token for accessing private Bitbucket repo"
+			},
 		},
 		"masterVmSize": {
 			"type": "string",

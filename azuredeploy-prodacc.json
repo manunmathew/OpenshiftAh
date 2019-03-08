@@ -14,7 +14,7 @@
 			"type": "securestring",
 			"metadata": {
 				"description": "Access token for accessing private Bitbucket repo"
-			},
+			}
 		},
 		"masterVmSize": {
 			"type": "string",

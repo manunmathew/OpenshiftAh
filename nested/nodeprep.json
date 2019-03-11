@@ -83,7 +83,7 @@
 				]
 			},
 			"protectedSettings": {
-				"commandToExecute": "[concat('bash ', parameters('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('rhsmUsernameOrOrgId'), variables('singlequote'), ' ',variables('singlequote'), parameters('rhsmPasswordOrActivationKey'), variables('singlequote'), ' ', variables('singlequote'), parameters('rhsmPoolId'), variables('singlequote'), ' ', variables('singlequote'), parameters('rhsmPoolId2'), variables('singlequote'))]"
+				"commandToExecute": "[concat('bash ', parameters('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('rhsmUsernameOrOrgId'), variables('singlequote'), ' ',variables('singlequote'), parameters('rhsmPasswordOrActivationKey'), variables('singlequote'), ' ', variables('singlequote'), parameters('rhsmPoolId1'), variables('singlequote'), ' ', variables('singlequote'), parameters('rhsmPoolId2'), variables('singlequote'))]"
 			}
 		}
 	}],

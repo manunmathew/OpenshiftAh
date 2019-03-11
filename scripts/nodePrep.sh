@@ -3,7 +3,8 @@ echo $(date) " - Starting Node Prep Script"
 
 export USERNAME_ORG=$1
 export PASSWORD_ACT_KEY="$2"
-export POOL_ID=$3
+export POOL_ID1=$3
+export POOL_ID2=$4
 
 # Remove RHUI
 
@@ -39,20 +40,34 @@ else
 	fi
 fi
 
-# subscription-manager attach --pool=$POOL_ID > attach.log
-# if [ $? -eq 0 ]
-# then
-    # echo "Pool attached successfully"
-# else
-    # grep attached attach.log
-    # if [ $? -eq 0 ]
-    # then
-        # echo "Pool $POOL_ID was already attached and was not attached again."
-    # else
-        # echo "Incorrect Pool ID or no entitlements available"
-        # exit 4
-    # fi
-# fi
+# Attach node to first pool ID.  If sucessful, then all good.
+subscription-manager attach --pool=$POOL_ID1 > attach1.log
+if [ $? -eq 0 ]
+then
+    echo "Pool $POOL_ID1 attached successfully"
+else
+    grep attached attach1.log
+    if [ $? -eq 0 ]
+    then
+        echo "Pool $POOL_ID1 was already attached and was not attached again."
+    else
+		# If first pool ID is full, then attach to second pool ID.
+        subscription-manager attach --pool=$POOL_ID2 > attach2.log
+		if [ $? -eq 0 ]
+		then
+			echo "Pool POOL_ID2 attached successfully"
+		else
+			grep attached attach2.log
+			if [ $? -eq 0 ]
+			then
+				echo "Pool $POOL_ID2 was already attached and was not attached again."
+			else
+				echo "Incorrect Pool ID or no entitlements available"
+				exit 4
+			fi
+		fi
+    fi
+fi
 
 # Disable all repositories and enable only the required ones
 echo $(date) " - Disabling all repositories and enabling only the required repos"

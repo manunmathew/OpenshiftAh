@@ -311,11 +311,18 @@
 				"description": "Red Hat Subscription Manager Username or Organization ID. To find your Organization ID, run on registered server: subscription-manager identity"
 			}
 		},
-		"rhsmPoolId": {
+		"rhsmPoolId1": {
 			"type": "string",
 			"minLength": 1,
 			"metadata": {
-				"description": "Red Hat Subscription Manager Pool ID with OpenShift entitlements for Application Nodes. To find it, run on registered server: subscription-manager list"
+				"description": "Red Hat Subscription Manager Pool ID #1 with OpenShift entitlements for Application Nodes. To find it, run on registered server: subscription-manager list"
+			}
+		},
+		"rhsmPoolId2": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Red Hat Subscription Manager Pool ID #2 with OpenShift entitlements for Application Nodes. To find it, run on registered server: subscription-manager list"
 			}
 		},
 		"rhsmBrokerPoolId": {
@@ -2530,8 +2537,11 @@
 							"secretName": "activationKey"
 						}
 					},
-					"rhsmPoolId": {
-						"value": "[parameters('rhsmPoolId')]"
+					"rhsmPoolId1": {
+						"value": "[parameters('rhsmPoolId1')]"
+					},
+					"rhsmPoolId2": {
+						"value": "[parameters('rhsmPoolId2')]"
 					},
 					"customTags": {
 						"value": "[parameters('coreInfraCustomTags')]"
@@ -2584,8 +2594,11 @@
 							"secretName": "activationKey"
 						}
 					},
-					"rhsmPoolId": {
-						"value": "[parameters('rhsmPoolId')]"
+					"rhsmPoolId1": {
+						"value": "[parameters('rhsmPoolId1')]"
+					},
+					"rhsmPoolId2": {
+						"value": "[parameters('rhsmPoolId2')]"
 					},
 					"customTags": {
 						"value": "[parameters('toolsCustomTags')]"
@@ -2638,8 +2651,11 @@
 							"secretName": "activationKey"
 						}
 					},
-					"rhsmPoolId": {
-						"value": "[parameters('rhsmPoolId')]"
+					"rhsmPoolId1": {
+						"value": "[parameters('rhsmPoolId1')]"
+					},
+					"rhsmPoolId2": {
+						"value": "[parameters('rhsmPoolId2')]"
 					},
 					"customTags": {
 						"value": "[parameters('productionCustomTags')]"
@@ -2692,8 +2708,11 @@
 							"secretName": "activationKey"
 						}
 					},
-					"rhsmPoolId": {
-						"value": "[parameters('rhsmPoolId')]"
+					"rhsmPoolId1": {
+						"value": "[parameters('rhsmPoolId1')]"
+					},
+					"rhsmPoolId2": {
+						"value": "[parameters('rhsmPoolId2')]"
 					},
 					"customTags": {
 						"value": "[parameters('acceptanceCustomTags')]"

@@ -44,10 +44,16 @@
 				"description": "Red Hat Subscription Manager password or activation key"
 			}
 		},
-		"rhsmPoolId": {
+		"rhsmPoolId1": {
 			"type": "string",
 			"metadata": {
-				"description": "Pool Id with OpenShift entitlements"
+				"description": "Pool Id #1 with OpenShift entitlements"
+			}
+		},
+		"rhsmPoolId2": {
+			"type": "string",
+			"metadata": {
+				"description": "Pool Id #2 with OpenShift entitlements"
 			}
 		},
 		"customTags": {
@@ -77,7 +83,7 @@
 				]
 			},
 			"protectedSettings": {
-				"commandToExecute": "[concat('bash ', parameters('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('rhsmUsernameOrOrgId'), variables('singlequote'), ' ',variables('singlequote'), parameters('rhsmPasswordOrActivationKey'), variables('singlequote'), ' ', variables('singlequote'), parameters('rhsmPoolId'), variables('singlequote'))]"
+				"commandToExecute": "[concat('bash ', parameters('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('rhsmUsernameOrOrgId'), variables('singlequote'), ' ',variables('singlequote'), parameters('rhsmPasswordOrActivationKey'), variables('singlequote'), ' ', variables('singlequote'), parameters('rhsmPoolId1'), variables('singlequote'), ' ', variables('singlequote'), parameters('rhsmPoolId2'), variables('singlequote'))]"
 			}
 		}
 	}],

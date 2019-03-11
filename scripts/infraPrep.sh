@@ -1,10 +1,9 @@
 #!/bin/bash
-echo $(date) " - Starting Master Prep Script"
+echo $(date) " - Starting Node Prep Script"
 
 export USERNAME_ORG=$1
 export PASSWORD_ACT_KEY="$2"
 export POOL_ID=$3
-export SUDOUSER=$4
 
 # Remove RHUI
 
@@ -71,7 +70,7 @@ subscription-manager repos \
 # Install base packages and update system to latest packages
 echo $(date) " - Install base packages and update system to latest packages"
 
-yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion httpd-tools kexec-tools sos psacct
+yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct
 yum -y install cloud-utils-growpart.noarch
 yum -y install ansible
 yum -y update glusterfs-fuse
@@ -90,13 +89,9 @@ part_number=${name#*${rootdrivename}}
 growpart $rootdrive $part_number -u on
 xfs_growfs $rootdev
 
-# Install OpenShift utilities
-echo $(date) " - Installing OpenShift utilities"
-yum -y install openshift-ansible
-
 # Install Docker
 echo $(date) " - Installing Docker"
-yum -y install docker 
+yum -y install docker
 
 # Update docker storage
 echo "
@@ -107,7 +102,7 @@ OPTIONS=\"\$OPTIONS --insecure-registry 172.30.0.0/16\"
 # Create thin pool logical volume for Docker
 echo $(date) " - Creating thin pool logical volume for Docker and starting service"
 
-DOCKERVG=$( parted -m /dev/sda print all 2>/dev/null | grep unknown | grep /dev/sd | cut -d':' -f1 )
+DOCKERVG=$( parted -m /dev/sda print all 2>/dev/null | grep unknown | grep /dev/sd | cut -d':' -f1 | head -n1 )
 
 echo "
 # Adding OpenShift data disk for docker
@@ -119,10 +114,10 @@ VG=docker-vg
 docker-storage-setup
 if [ $? -eq 0 ]
 then
-   echo "Docker thin pool logical volume created successfully"
+    echo "Docker thin pool logical volume created successfully"
 else
-   echo "Error creating logical volume for Docker"
-   exit 5
+    echo "Error creating logical volume for Docker"
+    exit 5
 fi
 
 # Enable and start Docker services
@@ -131,3 +126,4 @@ systemctl enable docker
 systemctl start docker
 
 echo $(date) " - Script Complete"
+

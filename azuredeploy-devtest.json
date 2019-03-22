@@ -298,7 +298,21 @@
 				"description": "Enable Container Native Storage: true or false"
 			}
 		},
-		"rhsmUsernameOrOrgId": {
+		"rhsmUsernameOrOrgIdBroker": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Red Hat Subscription Manager Username or Organization ID. To find your Organization ID, run on registered server: subscription-manager identity"
+			}
+		},
+		"rhsmUsernameOrOrgIdCns": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Red Hat Subscription Manager Username or Organization ID. To find your Organization ID, run on registered server: subscription-manager identity"
+			}
+		},
+		"rhsmUsernameOrOrgIdCompute": {
 			"type": "string",
 			"minLength": 1,
 			"metadata": {
@@ -2292,14 +2306,14 @@
 						"value": "[parameters('domainName')]"
 					},
 					"rhsmUsernameOrOrgId": {
-						"value": "[parameters('rhsmUsernameOrOrgId')]"
+						"value": "[parameters('rhsmUsernameOrOrgIdBroker')]"
 					},
 					"rhsmPasswordOrActivationKey": {
 						"reference": {
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "activationKey"
+							"secretName": "activationKeyBroker"
 						}
 					},
 					"rhsmPoolId": {
@@ -2414,14 +2428,14 @@
 						"value": "[parameters('adminUsername')]"
 					},
 					"rhsmUsernameOrOrgId": {
-						"value": "[parameters('rhsmUsernameOrOrgId')]"
+						"value": "[parameters('rhsmUsernameOrOrgIdBroker')]"
 					},
 					"rhsmPasswordOrActivationKey": {
 						"reference": {
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "activationKey"
+							"secretName": "activationKeyBroker"
 						}
 					},
 					"rhsmPoolId": {
@@ -2468,14 +2482,14 @@
 						"value": "[concat(variables('openshiftInfraHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"
 					},
 					"rhsmUsernameOrOrgId": {
-						"value": "[parameters('rhsmUsernameOrOrgId')]"
+						"value": "[parameters('rhsmUsernameOrOrgIdBroker')]"
 					},
 					"rhsmPasswordOrActivationKey": {
 						"reference": {
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "activationKey"
+							"secretName": "activationKeyBroker"
 						}
 					},
 					"rhsmPoolId": {
@@ -2522,14 +2536,14 @@
 						"value": "[concat(variables('openshiftCnsHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"
 					},
 					"rhsmUsernameOrOrgId": {
-						"value": "[parameters('rhsmUsernameOrOrgId')]"
+						"value": "[parameters('rhsmUsernameOrOrgIdCns')]"
 					},
 					"rhsmPasswordOrActivationKey": {
 						"reference": {
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "activationKey"
+							"secretName": "activationKeyCns"
 						}
 					},
 					"rhsmPoolId1": {
@@ -2579,14 +2593,14 @@
 						"value": "[concat(variables('openshiftToolsNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
 					},
 					"rhsmUsernameOrOrgId": {
-						"value": "[parameters('rhsmUsernameOrOrgId')]"
+						"value": "[parameters('rhsmUsernameOrOrgIdCompute')]"
 					},
 					"rhsmPasswordOrActivationKey": {
 						"reference": {
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "activationKey"
+							"secretName": "activationKeyCompute"
 						}
 					},
 					"rhsmPoolId1": {
@@ -2636,14 +2650,14 @@
 						"value": "[concat(variables('openshiftTestNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
 					},
 					"rhsmUsernameOrOrgId": {
-						"value": "[parameters('rhsmUsernameOrOrgId')]"
+						"value": "[parameters('rhsmUsernameOrOrgIdCompute')]"
 					},
 					"rhsmPasswordOrActivationKey": {
 						"reference": {
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "activationKey"
+							"secretName": "activationKeyCompute"
 						}
 					},
 					"rhsmPoolId1": {
@@ -2693,14 +2707,14 @@
 						"value": "[concat(variables('openshiftDevelopmentNodeHostname'), padLeft(add(copyIndex(), 1), 2, '0'))]"
 					},
 					"rhsmUsernameOrOrgId": {
-						"value": "[parameters('rhsmUsernameOrOrgId')]"
+						"value": "[parameters('rhsmUsernameOrOrgIdCompute')]"
 					},
 					"rhsmPasswordOrActivationKey": {
 						"reference": {
 							"keyvault": {
 								"id": "[concat('/subscriptions/', parameters('keyVaultSubscriptionId'), '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
 							},
-							"secretName": "activationKey"
+							"secretName": "activationKeyCompute"
 						}
 					},
 					"rhsmPoolId1": {

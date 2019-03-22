@@ -718,7 +718,7 @@
 		"diagStorageAccountM": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscm01')]",
 		"diagStorageAccountI": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosci01')]",
 		"diagStorageAccountC": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscc01')]",
-		"diagStorageAccountT": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscp01')]",
+		"diagStorageAccountT": "[concat(variables('simplifiedClusterPrefix'), 'prdsaosca01')]",
 		"diagStorageAccountP": "[concat(variables('simplifiedClusterPrefix2'), 'prdsaosca01')]",
 		"diagStorageAccountA": "[concat(variables('simplifiedClusterPrefix2'), 'accsaosca01')]",
 		"newStorageAccountRegistry": "[concat(variables('simplifiedClusterPrefix'), 'prdsaoscr01')]",

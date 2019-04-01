@@ -841,6 +841,7 @@
 		"nodePrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/nodePrep.sh')]",
 		"masterPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/masterPrep.sh')]",
 		"infraPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/infraPrep.sh')]",
+		"cnsPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/cnsPrep.sh')]",
 		"openshiftDeploymentScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/deployOpenShift.sh')]",
 		"bastionPrepScriptFileName": "bastionPrep.sh",
 		"nodePrepScriptFileName": "nodePrep.sh",
@@ -857,6 +858,7 @@
 		"bastionPrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/bastionprep.json')]",
 		"masterPrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/masterprep.json')]",
 		"infraPrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/infraprep.json')]",
+		"cnsPrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/cnsprep.json')]",
 		"nodePrepTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/nodeprep.json')]",
 		"deployOpenShift": true,
 		"vmSizesMap": {
@@ -2516,7 +2518,7 @@
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
-					"uri": "[variables('nodePrepTemplateUrl')]",
+					"uri": "[variables('cnsPrepTemplateUrl')]",
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
@@ -2530,7 +2532,7 @@
 						"value": "[variables('nodePrepScriptUrl')]"
 					},
 					"nodePrepScriptFileName": {
-						"value": "[variables('nodePrepScriptFileName')]"
+						"value": "[variables('cnsPrepScriptFileName')]"
 					},
 					"openshiftNodeHostname": {
 						"value": "[concat(variables('openshiftCnsHostname'), padLeft(add(copyIndex(), 1), 2, '1'))]"

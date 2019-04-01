@@ -79,6 +79,8 @@ sed -i -e '/Defaults    env_keep += "LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSE
 if [[ $CLOUD == "US" ]]
 then
     export DOCKERREGISTRYREALM="core.usgovcloudapi.net"
+elif [[ $CLOUD == "CH" ]]
+	export DOCKERREGISTRYREALM="core.chinacloudapi.cn"
 else
     export DOCKERREGISTRYREALM="core.windows.net"
 fi

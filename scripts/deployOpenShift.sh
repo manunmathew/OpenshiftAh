@@ -80,6 +80,7 @@ if [[ $CLOUD == "US" ]]
 then
     export DOCKERREGISTRYREALM="core.usgovcloudapi.net"
 elif [[ $CLOUD == "CH" ]]
+then
 	export DOCKERREGISTRYREALM="core.chinacloudapi.cn"
 else
     export DOCKERREGISTRYREALM="core.windows.net"

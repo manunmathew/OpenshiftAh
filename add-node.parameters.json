@@ -1,0 +1,88 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"_artifactsLocation": {
+			"value": "https://raw.githubusercontent.com/haroldwongms/xyzproject/multipleactivationkey"
+		},
+		"nodeVmSize": {
+			"value": "Standard_D4s_v3"
+		},
+		"osImageType": {
+			"value": "marketplace"
+		},
+		"marketplaceOsImage": {
+			"value": {
+				"publisher": "redhat",
+				"offer": "rhel-byos",
+				"sku": "rhel-raw75",
+				"version": "7.6.20190307"
+			}
+		},
+		"nodeCustomTags": {
+			"value": {
+				"Application ID": "AP00000xxxx",
+				"Application Name": "OpenShift Container Platform cluster",
+				"Business Unit Name": "Business Name",
+				"Environment": "Production"
+			}
+		},
+		"storageKind": {
+			"value": "managed"
+		},
+		"openshiftBastionHostname": {
+			"value": "bastionvm"
+		},
+		"openshiftNodeHostname": {
+			"value": "nodename"
+		},
+		"nodeAvailabilitySet": {
+			"value": "nodeAvailabilitySet"
+		},
+		"nodeType": {
+			"value": "production"
+		},
+		"diagStorageAccount": {
+			"value": "diagStorageAccount"
+		},
+		"dataDiskSize": {
+			"value": 64
+		},
+		"adminUsername": {
+			"value": "ocpadmin"
+		},
+		"rhsmUsernameOrOrgIdCompute": {
+			"value": "usernameororgid"
+		},
+		"rhsmPoolId1": {
+			"value": "8a12345665c8c9876166abdbe01abcde"
+		},
+		"rhsmPoolId2": {
+			"value": "8a12345665c8c9876166abdbe01abcde"
+		},
+		"sshPublicKey": {
+			"value": "GEN-SSH-PUB-KEY"
+		},
+		"keyVaultSubscriptionId": {
+			"value": "255a325e-8276-4ada-af8f-33af5658eb34"
+		},
+		"keyVaultResourceGroup": {
+			"value": "keyvaultrg"
+		},
+		"keyVaultName": {
+			"value": "keyvault"
+		},
+		"nodeVirtualNetworkName": {
+			"value": "ocpvnet"
+		},
+		"nodeVirtualNetworkResourceGroup": {
+			"value": "255a325e-8276-4ada-af8f-33af5658eb34"
+		},
+		"nodeSubnetName": {
+			"value": "nodesubnet"
+		},
+		"nodeIpAddress": {
+			"value": "10.4.1.20"
+		}
+	}
+}

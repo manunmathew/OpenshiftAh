@@ -196,13 +196,6 @@
 				"description": "Name of the subnet for new compute node"
 			}
 		},
-		"nodeSubnetPrefix": {
-			"type": "string",
-			"defaultValue": "10.4.0.0/16",
-			"metadata": {
-				"description": "CIDR used for the subnet - needs to be a subset of the addressPrefix - default is 10.4.0.0/16"
-			}
-		},
 		"nodeIpAddress": {
 			"type": "string",
 			"defaultValue": "10.4.1.20",

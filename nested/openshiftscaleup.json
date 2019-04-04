@@ -1,0 +1,84 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"location": {
+			"type": "string",
+			"metadata": {
+				"description": "Datacenter Region Location"
+			}
+		},
+		"apiVersionCompute": {
+			"type": "string",
+			"metadata": {
+				"description": "API version for compute resources"
+			}
+		},
+		"openshiftScaleUpScriptUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Cluster scale up script Url"
+			}
+		},
+		"openshiftScaleUpScriptFileName": {
+			"type": "string",
+			"metadata": {
+				"description": "Cluster scale up script file name"
+			}
+		},
+		"openshiftBastionHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift Bastion hostname"
+			}
+		},
+		"openshiftNodeHostname": {
+			"type": "string",
+			"metadata": {
+				"description": "OpenShift node hostname"
+			}
+		},
+		"adminUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "Administrator username on all VMs"
+			}
+		"nodeType": {
+			"type": "string",
+			"metadata": {
+				"description": "Node type"
+			}
+		},
+		"nodeCustomTags": {
+			"type": "object",
+			"metadata": {
+				"description": "Custom Tags"
+			}
+		}
+	},
+	"variables": {
+		"singlequote": "'"
+	},
+	"resources": [{
+		"type": "Microsoft.Compute/virtualMachines/extensions",
+		"name": "[concat(parameters('openshiftBastionHostname'), '/deployOpenShift')]",
+		"location": "[parameters('location')]",
+		"apiVersion": "[parameters('apiVersionCompute')]",
+		"tags": "[parameters('customTags')]",
+		"properties": {
+			"publisher": "Microsoft.Azure.Extensions",
+			"type": "CustomScript",
+			"typeHandlerVersion": "2.0",
+			"autoUpgradeMinorVersion": true,
+			"settings": {
+				"fileUris": [
+					"[parameters('openshiftScaleUpScriptUrl')]"
+				]
+			},
+			"protectedSettings": {
+				"commandToExecute": "[concat('bash ', parameters('openshiftScaleUpScriptFileName'), ' ', variables('singlequote'), parameters('adminUsername'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftNodeHostname'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeType'), variables('singlequote'))]"
+			}
+		}
+	}],
+	"outputs": {}
+}

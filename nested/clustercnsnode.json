@@ -121,6 +121,12 @@
 			"metadata": {
 				"description": "Custom Tags"
 			}
+		},
+		"zones": {
+			"type": "string",
+			"metadata": {
+				"description": "Availability zone information"
+			}
 		}
 	},
 	"variables": {
@@ -211,7 +217,8 @@
 					"storageUri": "[parameters('diagStorageAccountUri')]"
 				}
 			}
-		}
+		},
+		"zones": "[parameters('zones')]"
 	}],
 	"outputs": {}
 }

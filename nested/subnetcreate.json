@@ -53,6 +53,9 @@
 				"addressPrefix": "[parameters('subnetPrefix')]",
 				"networkSecurityGroup": {
 					"id": "[parameters('networkSecurityGroup')]"
+				},
+				"routeTable": {
+					"id": "[resourceId('Microsoft.Network/routeTables', variables('existingVnetName'))]"
 				}
 			}
 		}

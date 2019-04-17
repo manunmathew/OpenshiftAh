@@ -1869,9 +1869,6 @@
 					},
 					"customTags": {
 						"value": "[parameters('coreInfraCustomTags')]"
-					},
-					"zones": {
-						"value": "[split(string(add(mod(copyIndex(),3),1)), ',')]"
 					}
 				}
 			}
@@ -1951,9 +1948,6 @@
 					},
 					"customTags": {
 						"value": "[parameters('coreInfraCustomTags')]"
-					},
-					"zones": {
-						"value": "[split(string(add(mod(copyIndex(),3),1)), ',')]"
 					}
 				}
 			}
@@ -2036,9 +2030,6 @@
 					},
 					"customTags": {
 						"value": "[parameters('coreInfraCustomTags')]"
-					},
-					"zones": {
-						"value": "[split(string(add(mod(copyIndex(),3),1)), ',')]"
 					}
 				}
 			}
@@ -2118,9 +2109,6 @@
 					},
 					"customTags": {
 						"value": "[parameters('toolsCustomTags')]"
-					},
-					"zones": {
-						"value": "[split(string(add(mod(copyIndex(),3),1)), ',')]"
 					}
 				}
 			}
@@ -2200,9 +2188,6 @@
 					},
 					"customTags": {
 						"value": "[parameters('productionCustomTags')]"
-					},
-					"zones": {
-						"value": "[split(string(add(mod(copyIndex(),3),1)), ',')]"
 					}
 				}
 			}
@@ -2282,9 +2267,6 @@
 					},
 					"customTags": {
 						"value": "[parameters('acceptanceCustomTags')]"
-					},
-					"zones": {
-						"value": "[split(string(add(mod(copyIndex(),3),1)), ',')]"
 					}
 				}
 			}

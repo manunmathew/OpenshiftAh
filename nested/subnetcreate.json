@@ -55,7 +55,7 @@
 					"id": "[parameters('networkSecurityGroup')]"
 				},
 				"routeTable": {
-					"id": "[resourceId('Microsoft.Network/routeTables', variables('existingVnetName'))]"
+					"id": "[resourceId('Microsoft.Network/routeTables', parameters('existingVnetName'))]"
 				}
 			}
 		}
